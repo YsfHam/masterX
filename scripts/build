@@ -1,0 +1,34 @@
+#! /bin/bash
+
+errors_to_ignore=(
+  '../masterX/src/mxpch.hpp:1:9: warning: #pragma once in main file
+    1 | #pragma once
+      |         ^~~~'
+  
+  'hello'
+)
+
+length=${#errors_to_ignore[@]}
+
+
+if test $# = 0; then
+    config=debug
+else
+  config=$1
+fi
+logfile=buildlog
+premake5 gmake2
+make -j config=$config 2> $logfile
+size=$(wc -c $logfile | awk '{print $1}')
+if test $size != 0; then
+  content=$(cat $logfile)
+  for ((i=0; i<$length; i++))
+  do
+    error=${errors_to_ignore[$i]}
+    if test "$error" = "$content"; then
+      exit 0
+    fi
+  done
+  open $logfile
+  exit -1
+fi

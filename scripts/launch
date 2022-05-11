@@ -1,0 +1,4 @@
+#! /bin/bash
+
+basename=$(dirname "$0")
+$basename/build && $basename/run

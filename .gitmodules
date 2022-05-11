@@ -1,0 +1,6 @@
+[submodule "masterX/libs/spdlog"]
+	path = masterX/libs/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "masterX/libs/GLFW"]
+	path = masterX/libs/GLFW
+	url = https://github.com/YsfHam/glfw
