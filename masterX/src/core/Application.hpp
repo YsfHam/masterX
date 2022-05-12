@@ -2,17 +2,17 @@
 
 #include "Window.hpp"
 #include "LayerStack.hpp"
+#include "Imgui/ImguiLayer.hpp"
 
-namespace core
+namespace mx
 {
     class Application : public EventsListener, public std::enable_shared_from_this<Application>
     {
     public:
-        Application();
         virtual ~Application();
 
-        void pushLayer(utils::Ref<Layer> layer);
-        void pushOverlay(utils::Ref<Layer> overlay);
+        void pushLayer(mx::Ref<Layer> layer);
+        void pushOverlay(mx::Ref<Layer> overlay);
 
         Window& getWindow() { return *m_window; }
 
@@ -20,7 +20,8 @@ namespace core
 
 
         void run();
-
+    protected:
+        Application();
     private:
         virtual void onEventReceive(Event& e) override;
         virtual bool onWindowClose(WindowCloseEvent& e) override;
@@ -28,10 +29,10 @@ namespace core
     private:
         static Application *s_instance;
 
-        Window *m_window;
-
+        std::unique_ptr<Window> m_window;
+        Ref<ImguiLayer> m_imguiLayer;
         LayerStack m_layerStack;
     }; 
 
-    Application* createApplication();
+    mx::Ref<mx::Application> createApplication();
 }

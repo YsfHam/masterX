@@ -16,24 +16,25 @@ project "masterX"
         "src/**.cpp"
     }
 
-    libdirs
-    {
-    }
-
     links
     {
         "GLFW",
+        "glad",
+        "Imgui",
+
+
         "CoreFoundation.framework",
         "Cocoa.framework",
         "IOKit.framework",
         "CoreVideo.framework",
         "OpenGL.framework",
-
     }
 
     includedirs
     {
         "src",
         "%{Includes.spdlog}",
-        "%{Includes.GLFW}"
+        "%{Includes.GLFW}",
+        "%{Includes.glad}",
+        "%{Includes.Imgui}",
     }

@@ -2,7 +2,7 @@
 
 #include "Events/EventsListener.hpp"
 
-namespace core
+namespace mx
 {
     class Layer : public EventsListener
     {
@@ -12,5 +12,6 @@ namespace core
         virtual void onAttach() {}
         virtual void onDetach() {}
         virtual void onUpdate() {}
+        virtual void onImguiRender() {}
     };
 }

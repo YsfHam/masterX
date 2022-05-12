@@ -4,21 +4,21 @@
 #include "Layer.hpp"
 #include "utils/types.hpp"
 
-namespace core
+namespace mx
 {
     class LayerStack
     {
     public:
         ~LayerStack();
-        void pushLayer(utils::Ref<Layer> layer);
-        void pushOverlay(utils::Ref<Layer> overlay);
+        void pushLayer(mx::Ref<Layer> layer);
+        void pushOverlay(mx::Ref<Layer> overlay);
 
 
-        std::deque<utils::Ref<Layer>>::iterator begin() {return m_layers.begin(); }
-        std::deque<utils::Ref<Layer>>::iterator end() {return m_layers.end(); }
+        std::deque<mx::Ref<Layer>>::iterator begin() {return m_layers.begin(); }
+        std::deque<mx::Ref<Layer>>::iterator end() {return m_layers.end(); }
 
 
     private:
-        std::deque<utils::Ref<Layer>> m_layers;
+        std::deque<mx::Ref<Layer>> m_layers;
     };
 }

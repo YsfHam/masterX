@@ -16,19 +16,19 @@ project "sandbox"
     includedirs
     {
         "%{wks.location}/masterX/src",
-
         "%{Includes.spdlog}",
         "%{Includes.GLFW}",
-    }
-
-    libdirs
-    {
+        "%{Includes.Imgui}"
     }
 
     links
     {
         "masterX",
         "GLFW",
+        "glad",
+        "Imgui",
+
+
         "CoreFoundation.framework",
         "Cocoa.framework",
         "IOKit.framework",

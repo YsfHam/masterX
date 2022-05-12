@@ -4,57 +4,70 @@
 #include "Log.hpp"
 #include "Assert.hpp"
 
+#include <glad/glad.h>
 
-core::Application *core::Application::s_instance = nullptr;
 
-core::Application::Application() 
+mx::Application *mx::Application::s_instance = nullptr;
+
+mx::Application::Application() 
 {
     MX_CORE_ASSERT(s_instance == nullptr, "Application already created");
-
     s_instance = this;
 
-    m_window = new Window();
+    m_window = std::make_unique<Window>();
+
+    m_imguiLayer = Ref<ImguiLayer>::Create();
+    pushOverlay(m_imguiLayer);
 }
 
-core::Application::~Application() 
+mx::Application::~Application() 
 {
     MX_CORE_FATAL("Bye");
 }
 
-void core::Application::pushLayer(utils::Ref<Layer> layer)
+void mx::Application::pushLayer(mx::Ref<Layer> layer)
 {
     layer->onAttach();
     m_layerStack.pushLayer(layer);
     m_window->pushEventListnerLayer(layer);
 }
 
-void core::Application::pushOverlay(utils::Ref<Layer> overlay)
+void mx::Application::pushOverlay(mx::Ref<Layer> overlay)
 {
     overlay->onAttach();
     m_layerStack.pushOverlay(overlay);
     m_window->pushEventListnerOverlay(overlay);
 }
 
-void core::Application::run() 
+void mx::Application::run() 
 {
     m_window->pushEventListnerLayer(shared_from_this());
 
     while (m_window->isOpen())
     {
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         for (auto layer : m_layerStack)
             layer->onUpdate();
+
+        m_imguiLayer->begin();
+        for (auto layer : m_layerStack)
+            layer->onImguiRender();
+        m_imguiLayer->end();
         
         m_window->update();
     }
 
-    delete m_window;
+    m_window->removeEventsListener(shared_from_this());
+
 }
 
-void core::Application::onEventReceive(Event& e)
+void mx::Application::onEventReceive(Event& e)
 {
 }
 
-bool core::Application::onWindowClose(WindowCloseEvent& e)
+bool mx::Application::onWindowClose(WindowCloseEvent& e)
 {
     m_window->close();
 

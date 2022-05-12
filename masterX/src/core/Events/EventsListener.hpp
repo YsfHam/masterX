@@ -7,7 +7,7 @@
 
 #include "utils/macros.hpp"
 
-namespace core
+namespace mx
 {
     class EventsListener
     {

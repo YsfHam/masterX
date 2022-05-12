@@ -3,7 +3,7 @@
 
 #include "Events.hpp"
 
-namespace core
+namespace mx
 {
     class WindowCloseEvent : public Event_Base<WindowCloseEvent>
     {

@@ -2,7 +2,7 @@
 
 #include "mxpch.hpp"
 
-namespace core
+namespace mx
 {
     enum class EventType
     {

@@ -3,10 +3,19 @@
 
 #include "Assert.hpp"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-uint32_t core::Window::s_WindowsCount = 0;
 
-core::Window::Window(const WindowProps& windowProps) 
+static void errorCallback(int errorCode, const char *description)
+{
+    MX_CORE_ERROR("GLFW error occurred !! ({}) : {}", errorCode, description);
+}
+
+
+uint32_t mx::Window::s_WindowsCount = 0;
+
+mx::Window::Window(const WindowProps& windowProps) 
 {
 
     m_data.WindowProps = windowProps;
@@ -17,10 +26,19 @@ core::Window::Window(const WindowProps& windowProps)
     {
         int success = glfwInit();
         MX_CORE_ASSERT(success == GLFW_TRUE, "Cannot initialize glfw !! ");
+        glfwSetErrorCallback(errorCallback);
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     }
 
     m_window = glfwCreateWindow(windowProps.Width, windowProps.Height, windowProps.Title.c_str(), nullptr, nullptr);
     MX_CORE_ASSERT(m_window != nullptr, "Cannot create window");
+    glfwMakeContextCurrent(m_window);
+    int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    MX_CORE_ASSERT(success, "Failed to initialize opengl");
     m_open = true;
     setVsync(true);
     s_WindowsCount++;
@@ -37,6 +55,9 @@ core::Window::Window(const WindowProps& windowProps)
 
     glfwSetWindowSizeCallback(m_window, [](GLFWwindow *window, int width, int height){
         WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+        data.WindowProps.Width = width;
+        data.WindowProps.Height = height;
 
         data.EventsQueue.push(new WindowResizeEvent(width, height));
     });
@@ -105,15 +126,16 @@ core::Window::Window(const WindowProps& windowProps)
 
 }
 
-core::Window::~Window()
+mx::Window::~Window()
 {
+    MX_CORE_TRACE("Window destroyed");
     glfwDestroyWindow(m_window);
     s_WindowsCount--;
     if (s_WindowsCount == 0)
         glfwTerminate();
 }
 
-void core::Window::handleEvents() 
+void mx::Window::handleEvents() 
 {
     glfwPollEvents();
 
@@ -134,41 +156,53 @@ void core::Window::handleEvents()
     }
 }
 
-void core::Window::update() 
+void mx::Window::update() 
 {
     handleEvents();
 
     glfwSwapBuffers(m_window);
 }
 
-void core::Window::setVsync(bool vsync) 
+void mx::Window::setVsync(bool vsync) 
 {
     m_vsync = vsync;
     glfwSwapInterval(m_vsync ? 1 : 0);
 }
 
-bool core::Window::isVsync() const 
+bool mx::Window::isVsync() const 
 {
     return m_vsync;    
 }
 
-bool core::Window::isOpen() 
+bool mx::Window::isOpen() 
 {
     return m_open;    
 }
 
-void core::Window::close() 
+void mx::Window::close() 
 {
     m_open = false;    
 }
 
-void core::Window::pushEventListnerLayer(utils::Ref<EventsListener> eventsListenerLayer)
+void mx::Window::pushEventListnerLayer(mx::Ref<EventsListener> eventsListenerLayer)
 {
     m_eventListenersLayers.push_back(eventsListenerLayer);
 }
         
-void core::Window::pushEventListnerOverlay(utils::Ref<EventsListener> eventsListenerOverlay)
+void mx::Window::pushEventListnerOverlay(mx::Ref<EventsListener> eventsListenerOverlay)
 {
     m_eventListenersLayers.push_front(eventsListenerOverlay);
 
+}
+
+bool mx::Window::removeEventsListener(mx::Ref<EventsListener> eventsListener)
+{
+    auto it = std::find(m_eventListenersLayers.begin(), m_eventListenersLayers.end(), eventsListener);
+
+    if (it == m_eventListenersLayers.end())
+        return false;
+
+    m_eventListenersLayers.erase(it);
+
+    return true;
 }

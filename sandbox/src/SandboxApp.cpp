@@ -1,7 +1,9 @@
 #include <masterX.hpp>
 #include <core/EntryPoint.hpp>
 
-class SandboxLayer : public core::Layer
+using namespace mx;
+
+class SandboxLayer : public Layer
 {
     virtual void onAttach() override
     {
@@ -13,26 +15,39 @@ class SandboxLayer : public core::Layer
         MX_APP_INFO("Hello Sandbox layer leaving");
     }
 
-    virtual bool onWindowClose(core::WindowCloseEvent& e) override
+    virtual bool onWindowClose(WindowCloseEvent& e) override
     {
         MX_APP_WARN("Are you trying to leave !!!");
 
-        return true;
+        return false;
+    }
+
+    virtual void onEventReceive(Event& e) override
+    {
+    }
+
+    virtual void onImguiRender() override
+    {
+        ImGui::Begin("Test");
+        ImGui::Text("Hello ImGui!");
+        ImGui::End();
+        bool open = true;
+        ImGui::ShowDemoWindow(&open);
     }
 };
 
-class SandboxApp : public core::Application
+class SandboxApp : public Application
 {
 public:
     SandboxApp()
     {
         MX_APP_INFO("Hello World");
 
-        pushLayer(utils::Ref<SandboxLayer>(new SandboxLayer));
+        pushLayer(Ref<SandboxLayer>::Create());
     }
 };
 
-core::Application* core::createApplication()
+mx::Ref<mx::Application> mx::createApplication()
 {
-    return new SandboxApp;
+    return Ref<SandboxApp>::Create();
 }

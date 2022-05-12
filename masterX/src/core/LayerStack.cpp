@@ -1,18 +1,19 @@
 #include "LayerStack.hpp"
 #include "Log.hpp"
 
-core::LayerStack::~LayerStack()
+mx::LayerStack::~LayerStack()
 {
+    MX_CORE_TRACE("Layers detaching...");
     for (auto layer : m_layers)
         layer->onDetach();
 }
 
-void core::LayerStack::pushLayer(utils::Ref<Layer> layer) 
+void mx::LayerStack::pushLayer(mx::Ref<Layer> layer) 
 {
     m_layers.push_back(layer);
 }
 
-void core::LayerStack::pushOverlay(utils::Ref<Layer> overlay) 
+void mx::LayerStack::pushOverlay(mx::Ref<Layer> overlay) 
 {
     m_layers.push_front(overlay);
 }

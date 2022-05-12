@@ -5,7 +5,26 @@ errors_to_ignore=(
     1 | #pragma once
       |         ^~~~'
   
-  'hello'
+  "../masterX/libs/GLFW/src/cocoa_init.m:553:9: warning: incompatible pointer types initializing 'void (*)(_GLFWwindow *, GLFWbool)' (aka 'void (*)(struct _GLFWwindow *, int)') with an expression of type 'EGLenum (EGLint **)' (aka 'unsigned int (int **)') [-Wincompatible-pointer-types]
+        _glfwGetEGLPlatformCocoa,
+        ^~~~~~~~~~~~~~~~~~~~~~~~
+../masterX/libs/GLFW/src/cocoa_init.m:554:9: warning: incompatible pointer types initializing 'EGLenum (*)(EGLint **)' (aka 'unsigned int (*)(int **)') with an expression of type 'EGLNativeDisplayType (void)' (aka 'void *(void)') [-Wincompatible-pointer-types]
+        _glfwGetEGLNativeDisplayCocoa,
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../masterX/libs/GLFW/src/cocoa_init.m:555:9: warning: incompatible pointer types initializing 'EGLNativeDisplayType (*)(void)' (aka 'void *(*)(void)') with an expression of type 'EGLNativeWindowType (_GLFWwindow *)' (aka 'void *(struct _GLFWwindow *)') [-Wincompatible-pointer-types]
+        _glfwGetEGLNativeWindowCocoa,
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../masterX/libs/GLFW/src/cocoa_init.m:556:9: warning: incompatible pointer types initializing 'EGLNativeWindowType (*)(_GLFWwindow *)' (aka 'void *(*)(struct _GLFWwindow *)') with an expression of type 'void (char **)' [-Wincompatible-pointer-types]
+        _glfwGetRequiredInstanceExtensionsCocoa,
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../masterX/libs/GLFW/src/cocoa_init.m:557:9: warning: incompatible pointer types initializing 'void (*)(char **)' with an expression of type 'int (VkInstance, VkPhysicalDevice, uint32_t)' (aka 'int (void *, void *, unsigned int)') [-Wincompatible-pointer-types]
+        _glfwGetPhysicalDevicePresentationSupportCocoa,
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../masterX/libs/GLFW/src/cocoa_init.m:558:9: warning: incompatible pointer types initializing 'int (*)(VkInstance, VkPhysicalDevice, uint32_t)' (aka 'int (*)(void *, void *, unsigned int)') with an expression of type 'VkResult (VkInstance, _GLFWwindow *, const VkAllocationCallbacks *, VkSurfaceKHR *)' (aka 'enum VkResult (void *, struct _GLFWwindow *, const struct VkAllocationCallbacks *, unsigned long long *)') [-Wincompatible-pointer-types]
+        _glfwCreateWindowSurfaceCocoa,
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+6 warnings generated.
+"
 )
 
 length=${#errors_to_ignore[@]}
@@ -17,8 +36,11 @@ else
   config=$1
 fi
 logfile=buildlog
-premake5 gmake2
-make -j config=$config 2> $logfile
+if premake5 gmake2 ; then
+  make -j config=$config 2> $logfile
+else
+  exit -1
+fi
 size=$(wc -c $logfile | awk '{print $1}')
 if test $size != 0; then
   content=$(cat $logfile)
@@ -29,6 +51,6 @@ if test $size != 0; then
       exit 0
     fi
   done
-  open $logfile
+  $EDITOR $logfile
   exit -1
 fi

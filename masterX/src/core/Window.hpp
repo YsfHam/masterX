@@ -4,9 +4,9 @@
 #include "Events/EventsListener.hpp"
 #include "utils/types.hpp"
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
-namespace core
+namespace mx
 {
 
     struct WindowProps
@@ -35,8 +35,15 @@ namespace core
         bool isOpen();
         void close();
 
-        void pushEventListnerLayer(utils::Ref<EventsListener> eventsListenerLayer);
-        void pushEventListnerOverlay(utils::Ref<EventsListener> eventsListenerOverlay);
+        void pushEventListnerLayer(mx::Ref<EventsListener> eventsListenerLayer);
+        void pushEventListnerOverlay(mx::Ref<EventsListener> eventsListenerOverlay);
+
+        bool removeEventsListener(mx::Ref<EventsListener> eventsListener);
+
+        void* getNativeWindow() { return m_window; }
+
+        uint32_t getWidth() const { return m_data.WindowProps.Width; }
+        uint32_t getHeight() const { return m_data.WindowProps.Height; }
 
     private:
         struct WindowData
@@ -53,7 +60,7 @@ namespace core
         static uint32_t s_WindowsCount;
 
         WindowData m_data;
-        std::deque<utils::Ref<EventsListener>> m_eventListenersLayers;
+        std::deque<mx::Ref<EventsListener>> m_eventListenersLayers;
 
         GLFWwindow *m_window;
         bool m_vsync;

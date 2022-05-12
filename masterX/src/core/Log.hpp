@@ -3,7 +3,7 @@
 #include "mxpch.hpp"
 
 
-namespace core
+namespace mx
 {
     class Log
     {
@@ -15,11 +15,11 @@ namespace core
     };
 }
 
-#define MX_LOG_TRACE(logger, ...) ::core::Log::getLogger(logger)->trace(__VA_ARGS__)
-#define MX_LOG_INFO(logger, ...)  ::core::Log::getLogger(logger)->info(__VA_ARGS__)
-#define MX_LOG_WARN(logger, ...)  ::core::Log::getLogger(logger)->warn(__VA_ARGS__)
-#define MX_LOG_ERROR(logger, ...) ::core::Log::getLogger(logger)->error(__VA_ARGS__)
-#define MX_LOG_FATAL(logger, ...) ::core::Log::getLogger(logger)->critical(__VA_ARGS__)
+#define MX_LOG_TRACE(logger, ...) ::mx::Log::getLogger(logger)->trace(__VA_ARGS__)
+#define MX_LOG_INFO(logger, ...)  ::mx::Log::getLogger(logger)->info(__VA_ARGS__)
+#define MX_LOG_WARN(logger, ...)  ::mx::Log::getLogger(logger)->warn(__VA_ARGS__)
+#define MX_LOG_ERROR(logger, ...) ::mx::Log::getLogger(logger)->error(__VA_ARGS__)
+#define MX_LOG_FATAL(logger, ...) ::mx::Log::getLogger(logger)->critical(__VA_ARGS__)
 
 #define MX_CORE_TRACE(...) MX_LOG_TRACE("CORE", __VA_ARGS__)
 #define MX_CORE_INFO(...)  MX_LOG_INFO("CORE", __VA_ARGS__)

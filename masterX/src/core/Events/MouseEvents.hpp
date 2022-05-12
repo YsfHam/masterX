@@ -3,7 +3,7 @@
 #include "Events.hpp"
 
 
-namespace core
+namespace mx
 {
     class MouseButtonPressedEvent : public Event_Base<MouseButtonPressedEvent>
     {
