@@ -6,6 +6,21 @@
 
 namespace mx
 {
+    struct CommandLineArgs
+    {
+        uint32_t Argc;
+        char **Argv;
+    };
+
+    struct AppSettings
+    {
+        WindowProps WinProperties;
+
+        CommandLineArgs args;
+
+        bool EnableImGui = true;
+    };
+
     class Application : public EventsListener, public std::enable_shared_from_this<Application>
     {
     public:
@@ -18,10 +33,12 @@ namespace mx
 
         static Application& get() { return *s_instance; }
 
+        const CommandLineArgs& getCommandLineArgs() { return m_cmdArgs; }
+
 
         void run();
     protected:
-        Application();
+        Application(const AppSettings& settings = AppSettings());
     private:
         virtual void onEventReceive(Event& e) override;
         virtual bool onWindowClose(WindowCloseEvent& e) override;
@@ -32,7 +49,10 @@ namespace mx
         std::unique_ptr<Window> m_window;
         Ref<ImguiLayer> m_imguiLayer;
         LayerStack m_layerStack;
+
+        CommandLineArgs m_cmdArgs;
+        bool m_imguiEnabled;
     }; 
 
-    mx::Ref<mx::Application> createApplication();
+    mx::Ref<mx::Application> createApplication(const CommandLineArgs& args);
 }

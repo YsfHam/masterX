@@ -17,3 +17,13 @@ void mx::LayerStack::pushOverlay(mx::Ref<Layer> overlay)
 {
     m_layers.push_front(overlay);
 }
+
+void mx::LayerStack::popLayer(Ref<Layer> layer)
+{
+    auto it = std::find(m_layers.begin(), m_layers.end(), layer);
+    if (it != m_layers.end())
+    {
+        layer->onDetach();
+        m_layers.erase(it);
+    }
+}

@@ -22,4 +22,25 @@ namespace mx
         : std::shared_ptr<T>(nullptr)
         {}
     };
+
+    template<typename T>
+    class Scope : public std::unique_ptr<T>
+    {
+    public:
+        template<typename ...Args>
+        static Scope<T> Create(Args&&...args)
+        {
+            return std::make_unique<T>(std::forward<Args>(args)...);
+        }
+
+        template <typename U>
+        Scope(std::unique_ptr<U>&& ref)
+        : std::unique_ptr<T>(std::move(ref))
+        {}
+
+        Scope()
+        : std::unique_ptr<T>(nullptr)
+        {
+        }
+    };
 }

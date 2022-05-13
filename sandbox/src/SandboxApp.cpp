@@ -15,11 +15,25 @@ class SandboxLayer : public Layer
         MX_APP_INFO("Hello Sandbox layer leaving");
     }
 
+    virtual void onUpdate() override
+    {
+        if (Input::isKeyPressedOnce(Key::R))
+        {
+            MX_APP_INFO("Key R is pressed");
+        }
+    }
+
     virtual bool onWindowClose(WindowCloseEvent& e) override
     {
         MX_APP_WARN("Are you trying to leave !!!");
 
         return false;
+    }
+
+    virtual bool onKeyPressed(KeyPressedEvent& e) override
+    {
+
+        return true;
     }
 
     virtual void onEventReceive(Event& e) override
@@ -28,18 +42,14 @@ class SandboxLayer : public Layer
 
     virtual void onImguiRender() override
     {
-        ImGui::Begin("Test");
-        ImGui::Text("Hello ImGui!");
-        ImGui::End();
-        bool open = true;
-        ImGui::ShowDemoWindow(&open);
     }
 };
 
 class SandboxApp : public Application
 {
 public:
-    SandboxApp()
+    SandboxApp(const AppSettings& settings)
+        : Application(settings)
     {
         MX_APP_INFO("Hello World");
 
@@ -47,7 +57,9 @@ public:
     }
 };
 
-mx::Ref<mx::Application> mx::createApplication()
+mx::Ref<mx::Application> mx::createApplication(const CommandLineArgs& args)
 {
-    return Ref<SandboxApp>::Create();
+    AppSettings settings;
+    settings.WinProperties.Title = "Sandbox App";
+    return Ref<SandboxApp>::Create(settings);
 }

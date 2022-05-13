@@ -2,29 +2,29 @@
 #include "mxpch.hpp"
 
 #include "Events.hpp"
+#include "core/Input/KeyCodes.hpp"
 
 namespace mx
 {
-
     template<typename KeyEventType>
     class KeyEvent : public Event_Base<KeyEventType>
     {
     public:
-        uint32_t getKeyCode() const { return m_keyCode; }
+        KeyCode getKeyCode() const { return m_keyCode; }
     
     protected:
-        KeyEvent(uint32_t keyCode)
-            : Event_Base<KeyEventType>(EventCategoryKeyboard),
+        KeyEvent(KeyCode keyCode)
+            : Event_Base<KeyEventType>(EventCategoryKeyboard | EventCategoryInput),
             m_keyCode(keyCode)
         {}
     private:
-        uint32_t m_keyCode;
+        KeyCode m_keyCode;
     };
 
     class KeyPressedEvent : public KeyEvent<KeyPressedEvent>
     {
     public:
-        KeyPressedEvent(uint32_t keyCode, bool repeat)
+        KeyPressedEvent(KeyCode keyCode, bool repeat)
             : KeyEvent(keyCode), m_repeat(repeat)
         {
         }
@@ -48,7 +48,7 @@ namespace mx
     class KeyReleasedEvent : public KeyEvent<KeyReleasedEvent>
     {
     public:
-        KeyReleasedEvent(uint32_t keyCode)
+        KeyReleasedEvent(KeyCode keyCode)
         : KeyEvent(keyCode)
         {}
 

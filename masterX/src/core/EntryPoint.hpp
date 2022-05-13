@@ -3,14 +3,14 @@
 #include "Log.hpp"
 #include "utils/types.hpp"
 
-extern mx::Ref<mx::Application> mx::createApplication();
+extern mx::Ref<mx::Application> mx::createApplication(const CommandLineArgs& args);
 
 int main(int argc, char **argv)
 {
     mx::Log::init();
     MX_CORE_INFO("Engine starting ...");
 
-    mx::Ref<mx::Application> app = mx::createApplication();
+    mx::Ref<mx::Application> app = mx::createApplication({(uint32_t)argc, argv});
 
     if (app != nullptr)
     {

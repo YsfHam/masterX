@@ -19,6 +19,7 @@ namespace mx
         EventCategoryKeyboard    =    1 << 1,
         EventCategoryMouse       =    1 << 2,
         EventCategoryMouseButton =    1 << 3,
+        EventCategoryInput       =    1 << 4,
     };
 
     class Event

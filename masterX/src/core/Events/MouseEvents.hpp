@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Events.hpp"
+#include "core/Input/MouseCodes.hpp"
 
 
 namespace mx
@@ -8,8 +9,8 @@ namespace mx
     class MouseButtonPressedEvent : public Event_Base<MouseButtonPressedEvent>
     {
     public:
-        MouseButtonPressedEvent(uint32_t mouseButton)
-            : Event_Base(EventCategoryMouse | EventCategoryMouseButton),
+        MouseButtonPressedEvent(MouseCode mouseButton)
+            : Event_Base(EventCategoryMouse | EventCategoryMouseButton | EventCategoryInput),
             m_mouseButton(mouseButton)
         {}
 
@@ -21,15 +22,17 @@ namespace mx
             return ss.str();
         }
 
+        MouseCode getMouseButtonCode() { return m_mouseButton; }
+
     private:
-        uint32_t m_mouseButton;
+        MouseCode m_mouseButton;
     };
 
     class MouseButtonReleasedEvent : public Event_Base<MouseButtonReleasedEvent>
     {
     public:
-        MouseButtonReleasedEvent(uint32_t mouseButton)
-            : Event_Base(EventCategoryMouse | EventCategoryMouseButton),
+        MouseButtonReleasedEvent(MouseCode mouseButton)
+            : Event_Base(EventCategoryMouse | EventCategoryMouseButton | EventCategoryInput),
             m_mouseButton(mouseButton)
         {}
 
@@ -42,14 +45,14 @@ namespace mx
         }
 
     private:
-        uint32_t m_mouseButton;
+        MouseCode m_mouseButton;
     };
 
     class MouseMovedEvent : public Event_Base<MouseMovedEvent>
     {
     public:
         MouseMovedEvent(float mouseX, float mouseY)
-            : Event_Base(EventCategoryMouse),
+            : Event_Base(EventCategoryMouse | EventCategoryInput),
             m_mouseX(mouseX), m_mouseY(mouseY)
         {}
 
@@ -72,7 +75,7 @@ namespace mx
     {
     public:
         MouseScrolledEvent(float offsetX, float offsetY)
-            : Event_Base(EventCategoryMouse),
+            : Event_Base(EventCategoryMouse | EventCategoryInput),
             m_offsetX(offsetX), m_offsetY(offsetY)
         {}
 

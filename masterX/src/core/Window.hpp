@@ -4,8 +4,6 @@
 #include "Events/EventsListener.hpp"
 #include "utils/types.hpp"
 
-struct GLFWwindow;
-
 namespace mx
 {
 
@@ -23,47 +21,26 @@ namespace mx
     class Window
     {
     public:
-        Window(const WindowProps& windowProps = WindowProps());
+        
+        static std::unique_ptr<Window> Create(const WindowProps& props = WindowProps());
+        
+        virtual ~Window() = default;
 
-        ~Window();
+        virtual void update() = 0;
+        virtual void setVsync(bool vsync) = 0;
+        virtual bool isVsync() const = 0;
+        virtual bool isOpen() = 0;
+        virtual void close() = 0;
+        virtual void pushEventListnerLayer(mx::Ref<EventsListener> eventsListenerLayer) = 0;
+        virtual void pushEventListnerOverlay(mx::Ref<EventsListener> eventsListenerOverlay) = 0;
+        virtual bool removeEventsListener(mx::Ref<EventsListener> eventsListener) = 0;
+        virtual void* getNativeWindow() = 0;
 
-        void update();
+        virtual uint32_t getWidth() const  = 0;
+        virtual uint32_t getHeight() const = 0;
 
-        void setVsync(bool vsync);
-        bool isVsync() const;
-
-        bool isOpen();
-        void close();
-
-        void pushEventListnerLayer(mx::Ref<EventsListener> eventsListenerLayer);
-        void pushEventListnerOverlay(mx::Ref<EventsListener> eventsListenerOverlay);
-
-        bool removeEventsListener(mx::Ref<EventsListener> eventsListener);
-
-        void* getNativeWindow() { return m_window; }
-
-        uint32_t getWidth() const { return m_data.WindowProps.Width; }
-        uint32_t getHeight() const { return m_data.WindowProps.Height; }
-
-    private:
-        struct WindowData
-        {
-            WindowProps WindowProps;
-
-            std::queue<Event*> EventsQueue;
-        };
-
-    private:
-        void handleEvents();
-
-    private:
-        static uint32_t s_WindowsCount;
-
-        WindowData m_data;
-        std::deque<mx::Ref<EventsListener>> m_eventListenersLayers;
-
-        GLFWwindow *m_window;
-        bool m_vsync;
-        bool m_open;
+        virtual void setTitle(const std::string& title) = 0;
+        virtual void resize(uint32_t width, uint32_t height) = 0;
+        virtual void open() = 0;
     };
 }
