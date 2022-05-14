@@ -1,13 +1,25 @@
 #include "mxpch.hpp"
 #include "Input.hpp"
 
+#include "core/Application.hpp"
+
 #include "platform/glfw/GLFWInput.hpp"
 
 mx::Scope<mx::Input> mx::Input::s_instance;
 
 void mx::Input::init() 
 {
-    s_instance = Scope<GLFWInput>::Create();
+    WindowAPI api = Application::get().getWindowAPI();
+    switch (api)
+    {
+        case WindowAPI::None: s_instance = nullptr; break;
+        case WindowAPI::GLFW: s_instance = Scope<GLFWInput>::Create(); break;
+
+        default:
+        {
+            MX_CORE_ASSERT(false, "Unknown window API");
+        }
+    }
 }
 
 bool mx::Input::isKeyPressed(KeyCode key) 

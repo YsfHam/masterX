@@ -3,6 +3,9 @@
 #include "Window.hpp"
 #include "LayerStack.hpp"
 #include "Imgui/ImguiLayer.hpp"
+#include "Assert.hpp"
+#include "utils/types.hpp"
+#include "Renderer/GraphicsContext.hpp"
 
 namespace mx
 {
@@ -15,6 +18,9 @@ namespace mx
     struct AppSettings
     {
         WindowProps WinProperties;
+        WindowAPI WinAPI = WindowAPI::None;
+
+        RendererAPI GraphicsAPI;
 
         CommandLineArgs args;
 
@@ -29,11 +35,17 @@ namespace mx
         void pushLayer(mx::Ref<Layer> layer);
         void pushOverlay(mx::Ref<Layer> overlay);
 
-        Window& getWindow() { return *m_window; }
+        Window& getWindow() 
+        {
+            MX_CORE_ASSERT(m_window, "Window is not created");
+            return *m_window; 
+        }
 
         static Application& get() { return *s_instance; }
 
         const CommandLineArgs& getCommandLineArgs() { return m_cmdArgs; }
+        WindowAPI getWindowAPI() const { return m_windowAPI; }
+        RendererAPI getRendererAPI() const { return m_rendererAPI; }
 
 
         void run();
@@ -46,11 +58,13 @@ namespace mx
     private:
         static Application *s_instance;
 
-        std::unique_ptr<Window> m_window;
+        Scope<Window> m_window;
         Ref<ImguiLayer> m_imguiLayer;
         LayerStack m_layerStack;
 
         CommandLineArgs m_cmdArgs;
+        WindowAPI m_windowAPI;
+        RendererAPI m_rendererAPI;
         bool m_imguiEnabled;
     }; 
 

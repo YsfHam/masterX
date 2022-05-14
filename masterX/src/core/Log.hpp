@@ -27,8 +27,8 @@ namespace mx
 #define MX_CORE_ERROR(...) MX_LOG_ERROR("CORE", __VA_ARGS__)
 #define MX_CORE_FATAL(...) MX_LOG_FATAL("CORE", __VA_ARGS__)
 
-#define MX_APP_TRACE(...) MX_LOG_TRACE("APP", __VA_ARGS__)
-#define MX_APP_INFO(...)  MX_LOG_INFO("APP", __VA_ARGS__)
-#define MX_APP_WARN(...)  MX_LOG_WARN("APP", __VA_ARGS__)
-#define MX_APP_ERROR(...) MX_LOG_ERROR("APP", __VA_ARGS__)
-#define MX_APP_FATAL(...) MX_LOG_FATAL("APP", __VA_ARGS__)
+#define MX_TRACE(...) MX_LOG_TRACE("APP", __VA_ARGS__)
+#define MX_INFO(...)  MX_LOG_INFO("APP", __VA_ARGS__)
+#define MX_WARN(...)  MX_LOG_WARN("APP", __VA_ARGS__)
+#define MX_ERROR(...) MX_LOG_ERROR("APP", __VA_ARGS__)
+#define MX_FATAL(...) MX_LOG_FATAL("APP", __VA_ARGS__)

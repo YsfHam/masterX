@@ -4,25 +4,29 @@
 #include "Log.hpp"
 #include "Assert.hpp"
 #include "Input/Input.hpp"
-
-#include <glad/glad.h>
+#include "Renderer/Renderer.hpp"
 
 
 mx::Application *mx::Application::s_instance = nullptr;
 
 mx::Application::Application(const AppSettings& settings) 
-    : m_cmdArgs(settings.args), m_imguiEnabled(settings.EnableImGui)
+    : m_cmdArgs(settings.args), m_imguiEnabled(settings.EnableImGui),
+    m_windowAPI(settings.WinAPI), m_rendererAPI(settings.GraphicsAPI)
 {
     MX_CORE_ASSERT(s_instance == nullptr, "Application already created");
     s_instance = this;
 
+    MX_CORE_ASSERT(m_windowAPI != WindowAPI::None, "Window API must be specified");
+
     m_window = Window::Create(settings.WinProperties);
-
     Input::init();
+    RendererCommand::init();
 
-    m_imguiLayer = Ref<ImguiLayer>::Create();
     if (m_imguiEnabled)
+    {
+        m_imguiLayer = Ref<ImguiLayer>::Create();
         pushOverlay(m_imguiLayer);
+    }
 }
 
 mx::Application::~Application() 
@@ -50,9 +54,6 @@ void mx::Application::run()
 
     while (m_window->isOpen())
     {
-        glClearColor(0.0, 0.0, 0.0, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         for (auto layer : m_layerStack)
             layer->onUpdate();
 

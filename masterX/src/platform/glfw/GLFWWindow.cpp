@@ -3,6 +3,7 @@
 
 #include "core/Assert.hpp"
 #include "GLFWInputCodes.hpp"
+#include "core/Application.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -28,18 +29,21 @@ mx::GLFWWindow::GLFWWindow(const WindowProps& windowProps)
         int success = glfwInit();
         MX_CORE_ASSERT(success == GLFW_TRUE, "Cannot initialize glfw !! ");
         glfwSetErrorCallback(errorCallback);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     }
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    if (Application::get().getRendererAPI() == RendererAPI::OpenGL)
+    {
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    }
 
     m_window = glfwCreateWindow(windowProps.Width, windowProps.Height, windowProps.Title.c_str(), nullptr, nullptr);
     MX_CORE_ASSERT(m_window != nullptr, "Cannot create window");
-    glfwMakeContextCurrent(m_window);
-    int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    MX_CORE_ASSERT(success, "Failed to initialize opengl");
+
+    m_context = GraphicsContext::Create(m_window);
+
     m_open = true;
     setVsync(true);
     s_WindowsCount++;
@@ -163,7 +167,7 @@ void mx::GLFWWindow::update()
 {
     handleEvents();
 
-    glfwSwapBuffers(m_window);
+    m_context->swapBuffers();
 }
 
 void mx::GLFWWindow::setVsync(bool vsync) 

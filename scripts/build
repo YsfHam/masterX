@@ -23,8 +23,125 @@ errors_to_ignore=(
 ../masterX/libs/GLFW/src/cocoa_init.m:558:9: warning: incompatible pointer types initializing 'int (*)(VkInstance, VkPhysicalDevice, uint32_t)' (aka 'int (*)(void *, void *, unsigned int)') with an expression of type 'VkResult (VkInstance, _GLFWwindow *, const VkAllocationCallbacks *, VkSurfaceKHR *)' (aka 'enum VkResult (void *, struct _GLFWwindow *, const struct VkAllocationCallbacks *, unsigned long long *)') [-Wincompatible-pointer-types]
         _glfwCreateWindowSurfaceCocoa,
         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-6 warnings generated.
-"
+6 warnings generated."
+
+"In file included from ../masterX/src/platform/OpenGL/OpenGLContext.cpp:1:
+In file included from ../masterX/src/mxpch.hpp:17:
+In file included from /Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/spdlog.h:12:
+In file included from /Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/common.h:45:
+In file included from /Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/fmt.h:24:
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1493:50: warning: 'map' is deprecated [-Wdeprecated-declarations]
+    type_constant<decltype(arg_mapper<Context>().map(std::declval<const T&>())),
+                                                 ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1855:21: note: in instantiation of template type alias 'mapped_type_constant' requested here
+            detail::mapped_type_constant<remove_cvref_t<T>, Context>::value>(
+                    ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1872:10: note: in instantiation of function template specialization 'fmt::v8::format_arg_store<fmt::v8::basic_format_context<fmt::v8::appender, char>, const unsigned char *>::format_arg_store<const unsigned char *>' requested here
+  return {std::forward<Args>(args)...};
+         ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:371:52: note: in instantiation of function template specialization 'fmt::v8::make_format_args<fmt::v8::basic_format_context<fmt::v8::appender, char>, const unsigned char *>' requested here
+            fmt::detail::vformat_to(buf, fmt, fmt::make_format_args(std::forward<Args>(args)...));
+                                                   ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:90:9: note: in instantiation of function template specialization 'spdlog::logger::log_<const unsigned char *>' requested here
+        log_(loc, lvl, fmt, std::forward<Args>(args)...);
+        ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:96:9: note: in instantiation of function template specialization 'spdlog::logger::log<const unsigned char *>' requested here
+        log(source_loc{}, lvl, fmt, std::forward<Args>(args)...);
+        ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:158:9: note: in instantiation of function template specialization 'spdlog::logger::log<const unsigned char *>' requested here
+        log(level::info, fmt, std::forward<Args>(args)...);
+        ^
+../masterX/src/platform/OpenGL/OpenGLContext.cpp:22:5: note: in instantiation of function template specialization 'spdlog::logger::info<const unsigned char *>' requested here
+    MX_CORE_INFO(\"OpenGL renderer : {}\", glGetString(GL_RENDERER));
+    ^
+../masterX/src/core/Log.hpp:25:28: note: expanded from macro 'MX_CORE_INFO'
+#define MX_CORE_INFO(...)  MX_LOG_INFO(\"CORE\", __VA_ARGS__)
+                           ^
+../masterX/src/core/Log.hpp:19:65: note: expanded from macro 'MX_LOG_INFO'
+#define MX_LOG_INFO(logger, ...)  ::mx::Log::getLogger(logger)->info(__VA_ARGS__)
+                                                                ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1394:3: note: 'map' has been explicitly marked deprecated here
+  FMT_DEPRECATED FMT_CONSTEXPR FMT_INLINE auto map(const unsigned char* val)
+  ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:224:30: note: expanded from macro 'FMT_DEPRECATED'
+#    define FMT_DEPRECATED [[deprecated]]
+                             ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1706:43: warning: 'map' is deprecated [-Wdeprecated-declarations]
+  const auto& arg = arg_mapper<Context>().map(std::forward<T>(val));
+                                          ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1853:23: note: in instantiation of function template specialization 'fmt::v8::detail::make_arg<true, fmt::v8::basic_format_context<fmt::v8::appender, char>, fmt::v8::detail::type::cstring_type, const unsigned char *, 0>' requested here
+        data_{detail::make_arg<
+                      ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1872:10: note: in instantiation of function template specialization 'fmt::v8::format_arg_store<fmt::v8::basic_format_context<fmt::v8::appender, char>, const unsigned char *>::format_arg_store<const unsigned char *>' requested here
+  return {std::forward<Args>(args)...};
+         ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:371:52: note: in instantiation of function template specialization 'fmt::v8::make_format_args<fmt::v8::basic_format_context<fmt::v8::appender, char>, const unsigned char *>' requested here
+            fmt::detail::vformat_to(buf, fmt, fmt::make_format_args(std::forward<Args>(args)...));
+                                                   ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:90:9: note: in instantiation of function template specialization 'spdlog::logger::log_<const unsigned char *>' requested here
+        log_(loc, lvl, fmt, std::forward<Args>(args)...);
+        ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:96:9: note: in instantiation of function template specialization 'spdlog::logger::log<const unsigned char *>' requested here
+        log(source_loc{}, lvl, fmt, std::forward<Args>(args)...);
+        ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:158:9: note: in instantiation of function template specialization 'spdlog::logger::log<const unsigned char *>' requested here
+        log(level::info, fmt, std::forward<Args>(args)...);
+        ^
+../masterX/src/platform/OpenGL/OpenGLContext.cpp:22:5: note: in instantiation of function template specialization 'spdlog::logger::info<const unsigned char *>' requested here
+    MX_CORE_INFO(\"OpenGL renderer : {}\", glGetString(GL_RENDERER));
+    ^
+../masterX/src/core/Log.hpp:25:28: note: expanded from macro 'MX_CORE_INFO'
+#define MX_CORE_INFO(...)  MX_LOG_INFO(\"CORE\", __VA_ARGS__)
+                           ^
+../masterX/src/core/Log.hpp:19:65: note: expanded from macro 'MX_LOG_INFO'
+#define MX_LOG_INFO(logger, ...)  ::mx::Log::getLogger(logger)->info(__VA_ARGS__)
+                                                                ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1394:3: note: 'map' has been explicitly marked deprecated here
+  FMT_DEPRECATED FMT_CONSTEXPR FMT_INLINE auto map(const unsigned char* val)
+  ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:224:30: note: expanded from macro 'FMT_DEPRECATED'
+#    define FMT_DEPRECATED [[deprecated]]
+                             ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1493:50: warning: 'map' is deprecated [-Wdeprecated-declarations]
+    type_constant<decltype(arg_mapper<Context>().map(std::declval<const T&>())),
+                                                 ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1688:32: note: in instantiation of template type alias 'mapped_type_constant' requested here
+  return static_cast<unsigned>(mapped_type_constant<Arg, Context>::value) |
+                               ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1840:28: note: in instantiation of function template specialization 'fmt::v8::detail::encode_types<fmt::v8::basic_format_context<fmt::v8::appender, char>, const unsigned char *>' requested here
+      (is_packed ? detail::encode_types<Context, Args...>()
+                           ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1953:63: note: in instantiation of static data member 'fmt::v8::format_arg_store<fmt::v8::basic_format_context<fmt::v8::appender, char>, const unsigned char *>::desc' requested here
+      : basic_format_args(format_arg_store<Context, Args...>::desc,
+                                                              ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:371:47: note: in instantiation of function template specialization 'fmt::v8::basic_format_args<fmt::v8::basic_format_context<fmt::v8::appender, char> >::basic_format_args<const unsigned char *>' requested here
+            fmt::detail::vformat_to(buf, fmt, fmt::make_format_args(std::forward<Args>(args)...));
+                                              ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:90:9: note: in instantiation of function template specialization 'spdlog::logger::log_<const unsigned char *>' requested here
+        log_(loc, lvl, fmt, std::forward<Args>(args)...);
+        ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:96:9: note: in instantiation of function template specialization 'spdlog::logger::log<const unsigned char *>' requested here
+        log(source_loc{}, lvl, fmt, std::forward<Args>(args)...);
+        ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/logger.h:158:9: note: in instantiation of function template specialization 'spdlog::logger::log<const unsigned char *>' requested here
+        log(level::info, fmt, std::forward<Args>(args)...);
+        ^
+../masterX/src/platform/OpenGL/OpenGLContext.cpp:22:5: note: in instantiation of function template specialization 'spdlog::logger::info<const unsigned char *>' requested here
+    MX_CORE_INFO(\"OpenGL renderer : {}\", glGetString(GL_RENDERER));
+    ^
+../masterX/src/core/Log.hpp:25:28: note: expanded from macro 'MX_CORE_INFO'
+#define MX_CORE_INFO(...)  MX_LOG_INFO(\"CORE\", __VA_ARGS__)
+                           ^
+../masterX/src/core/Log.hpp:19:65: note: expanded from macro 'MX_LOG_INFO'
+#define MX_LOG_INFO(logger, ...)  ::mx::Log::getLogger(logger)->info(__VA_ARGS__)
+                                                                ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:1394:3: note: 'map' has been explicitly marked deprecated here
+  FMT_DEPRECATED FMT_CONSTEXPR FMT_INLINE auto map(const unsigned char* val)
+  ^
+/Users/youham/Dev/C++/masterX/build/../masterX/libs/spdlog/include/spdlog/fmt/bundled/core.h:224:30: note: expanded from macro 'FMT_DEPRECATED'
+#    define FMT_DEPRECATED [[deprecated]]
+                             ^
+3 warnings generated."
 )
 
 length=${#errors_to_ignore[@]}

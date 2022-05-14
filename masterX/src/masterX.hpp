@@ -16,3 +16,7 @@
 
 //ImGui
 #include "Imgui/Imgui.hpp"
+
+// Renderer
+#include "Renderer/Renderer.hpp"
+#include "Renderer/Shader.hpp"

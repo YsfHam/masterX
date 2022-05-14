@@ -6,6 +6,11 @@
 
 namespace mx
 {
+    enum class WindowAPI
+    {
+        None = 0,
+        GLFW,
+    };
 
     struct WindowProps
     {
@@ -22,7 +27,7 @@ namespace mx
     {
     public:
         
-        static std::unique_ptr<Window> Create(const WindowProps& props = WindowProps());
+        static Scope<Window> Create(const WindowProps& props = WindowProps());
         
         virtual ~Window() = default;
 

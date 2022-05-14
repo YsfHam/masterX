@@ -12,3 +12,9 @@ project "glad"
 	}
 
 	includedirs "include"
+
+	filter "configurations:Debug"
+        defines "MX_DEBUG"
+        symbols "On"
+    filter "configurations:Release"
+        optimize "On"

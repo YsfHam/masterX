@@ -38,3 +38,9 @@ project "masterX"
         "%{Includes.glad}",
         "%{Includes.Imgui}",
     }
+
+    filter "configurations:Debug"
+        defines "MX_DEBUG"
+        symbols "On"
+    filter "configurations:Release"
+        optimize "On"

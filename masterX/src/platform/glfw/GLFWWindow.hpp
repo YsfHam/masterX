@@ -2,6 +2,8 @@
 
 #include "core/Window.hpp"
 
+#include "Renderer/GraphicsContext.hpp"
+
 struct GLFWwindow;
 
 namespace mx
@@ -48,6 +50,9 @@ namespace mx
         std::deque<mx::Ref<EventsListener>> m_eventListenersLayers;
 
         GLFWwindow *m_window;
+
+        Scope<GraphicsContext> m_context;
+
         bool m_vsync;
         bool m_open;
     };
