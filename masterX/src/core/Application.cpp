@@ -6,6 +6,8 @@
 #include "Input/Input.hpp"
 #include "Renderer/Renderer.hpp"
 
+#include "math3D/math3D.hpp"
+
 
 mx::Application *mx::Application::s_instance = nullptr;
 

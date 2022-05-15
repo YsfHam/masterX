@@ -13,9 +13,11 @@ class SandboxLayer : public Layer
             #version 330 core
             layout (location = 0) in vec3 a_pos;
 
+            uniform mat4 u_model;
+
             void main()
             {
-                gl_Position = vec4(a_pos, 1.0);
+                gl_Position = u_model * vec4(a_pos, 1.0);
             }
         )";
 
@@ -66,14 +68,14 @@ class SandboxLayer : public Layer
 
     virtual void onUpdate() override
     {
-        if (Input::isKeyPressedOnce(Key::R))
-        {
-            MX_INFO("Key R is pressed");
-        }
         RendererCommand::setClearColor({0.2f, 0.3f, 0.1f, 1.0f});
         RendererCommand::clear();
 
+        math3D::Matrix4f model = math3D::Matrix4f::Identity;
+        model = math3D::translate(model, m_translation);
+
         m_shader->bind();
+        m_shader->setUniform("u_model", model);
         Renderer::beginScene();
         Renderer::submit(m_vertexArray);
         Renderer::endScene();
@@ -98,11 +100,15 @@ class SandboxLayer : public Layer
 
     virtual void onImguiRender() override
     {
+        ImGui::InputFloat3("inputFloat", (float*)&m_translation);
     }
 
 private:
     Ref<VertexArray> m_vertexArray;
     Ref<Shader> m_shader;
+
+    math3D::Vector3f m_translation = math3D::Vector3f::Zero;
+
 };
 
 class SandboxApp : public Application

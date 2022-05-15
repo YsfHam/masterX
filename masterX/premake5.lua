@@ -21,6 +21,7 @@ project "masterX"
         "GLFW",
         "glad",
         "Imgui",
+        "math3D",
 
 
         "CoreFoundation.framework",
@@ -37,6 +38,12 @@ project "masterX"
         "%{Includes.GLFW}",
         "%{Includes.glad}",
         "%{Includes.Imgui}",
+        "%{Includes.math3D}",
+    }
+
+    defines
+    {
+        "USE_INSTRINSICS"
     }
 
     filter "configurations:Debug"

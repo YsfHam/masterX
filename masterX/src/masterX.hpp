@@ -20,3 +20,6 @@
 // Renderer
 #include "Renderer/Renderer.hpp"
 #include "Renderer/Shader.hpp"
+
+// math3D lib
+#include <math3D/math3D.hpp>

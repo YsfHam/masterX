@@ -62,6 +62,12 @@ void mx::OpenGLShader::bind()
     glUseProgram(m_shaderID);
 }
 
+void mx::OpenGLShader::setUniform(const std::string& name, const math3D::Matrix4f& value)
+{
+    RendererID loc = glGetUniformLocation(m_shaderID, name.c_str());
+    glUniformMatrix4fv(loc, 1, GL_FALSE, value.getMatPtr());
+}
+
 bool mx::OpenGLShader::compileShader(const std::string& shaderSource, GLenum shaderType, RendererID& shaderID, std::vector<GLchar>& infoLog)
 {
     shaderID = glCreateShader(shaderType);

@@ -18,7 +18,8 @@ project "sandbox"
         "%{wks.location}/masterX/src",
         "%{Includes.spdlog}",
         "%{Includes.GLFW}",
-        "%{Includes.Imgui}"
+        "%{Includes.Imgui}",
+        "%{Includes.math3D}",
     }
 
     links
@@ -27,7 +28,7 @@ project "sandbox"
         "GLFW",
         "glad",
         "Imgui",
-
+        "math3D",
 
         "CoreFoundation.framework",
         "Cocoa.framework",
@@ -35,6 +36,11 @@ project "sandbox"
         "CoreVideo.framework",
         "OpenGL.framework",
 
+    }
+
+    defines
+    {
+        "USE_INSTRINSICS"
     }
 
     filter "configurations:Debug"
