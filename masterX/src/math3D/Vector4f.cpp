@@ -4,7 +4,7 @@
 
 #include "math.hpp"
 
-#ifdef USE_INSTRINSICS
+#ifdef USE_INTRINSICS
     #include "simd/sse/Vector4f_sse.inl"
 #endif
 
@@ -101,8 +101,9 @@ namespace math3D
     }
 
     // io
-    std::ostream& operator<<(std::ostream& stream, const Vector4f& v)
+    std::ostream& Vector4f::print(std::ostream& stream) const
     {
+        const Vector4f& v = *this;
         stream << '(' << v.x << ','
         << v.y << ','
         << v.z << ','

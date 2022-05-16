@@ -1,4 +1,5 @@
 #include "math3D/Vector3f.hpp"
+#include "helpers.hpp"
 #include <cstring>
 
 namespace math3D
@@ -10,7 +11,7 @@ namespace math3D
         float *vecFloatPtr = (float*)&vec;
         std::memcpy(arr, vecFloatPtr, 3 * sizeof(float));
 
-        return _mm_load_ps(arr);
+        return mm_load_ps(arr);
     }
 
     Vector3f& Vector3f::operator+=(const Vector3f& v)
@@ -69,7 +70,7 @@ namespace math3D
         Vector3f copy(*this);
         copy *= copy;
         float sum = copy.x + copy.y + copy.z;
-        __m128 _squareRoot = _mm_load_ps(&sum);
+        __m128 _squareRoot = mm_load_ps(&sum);
         _squareRoot = _mm_sqrt_ps(_squareRoot);
         return _squareRoot[0];
     }
@@ -129,7 +130,7 @@ namespace math3D
         float lVec[] = {l, l, l, l};
 
         __m128 _v = loadVec3(v);
-        __m128 _l = _mm_load_ps(lVec);
+        __m128 _l = mm_load_ps(lVec);
 
         __m128 _result = _mm_mul_ps(_v, _l);
 
@@ -163,7 +164,7 @@ namespace math3D
         float lVec[] = {l, l, l, l};
 
         __m128 _v = loadVec3(v);
-        __m128 _l = _mm_load_ps(lVec);
+        __m128 _l = mm_load_ps(lVec);
 
         __m128 _result = _mm_div_ps(_l, _v);
 
@@ -181,7 +182,7 @@ namespace math3D
         float lVec[] = {l, l, l, l};
 
         __m128 _v = loadVec3(v);
-        __m128 _l = _mm_load_ps(lVec);
+        __m128 _l = mm_load_ps(lVec);
 
         __m128 _result = _mm_div_ps(_v, _l);
 

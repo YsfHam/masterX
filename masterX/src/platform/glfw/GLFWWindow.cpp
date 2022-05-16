@@ -31,6 +31,7 @@ mx::GLFWWindow::GLFWWindow(const WindowProps& windowProps)
         glfwSetErrorCallback(errorCallback);
 
     }
+    // windows hints
     if (Application::get().getRendererAPI() == RendererAPI::OpenGL)
     {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -38,6 +39,8 @@ mx::GLFWWindow::GLFWWindow(const WindowProps& windowProps)
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     }
+
+    glfwWindowHint(GLFW_RESIZABLE, windowProps.Resizable ? GL_TRUE : GL_FALSE);
 
     m_window = glfwCreateWindow(windowProps.Width, windowProps.Height, windowProps.Title.c_str(), nullptr, nullptr);
     MX_CORE_ASSERT(m_window != nullptr, "Cannot create window");

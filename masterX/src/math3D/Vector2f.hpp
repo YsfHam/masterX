@@ -20,6 +20,8 @@ namespace math3D
         float length() const;
         float length2() const;
         Vector2f& normalize();
+        std::ostream& print(std::ostream& stream) const;
+
 
     public:
         float x, y;
@@ -46,7 +48,4 @@ namespace math3D
 
     Vector2f min(const Vector2f& v , const Vector2f& u);
     Vector2f max(const Vector2f& v , const Vector2f& u);
-
-    // io
-    std::ostream& operator<<(std::ostream& stream, const Vector2f& v);
 }

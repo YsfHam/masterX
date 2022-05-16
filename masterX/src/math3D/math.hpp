@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix4f.hpp"
+#include "Matrix3f.hpp"
 
 
 #include <cmath>
@@ -56,6 +57,14 @@ namespace math3D
 
     Matrix4f scale(const Matrix4f& matrix, const Vector3f scale);
     Matrix4f translate(const Matrix4f& matrix, const Vector3f translation);
+    Matrix4f rotate(const Matrix4f& matrix, const Angle& angle, const Vector3f axis);
+
+    Matrix3f scale2D(const Matrix3f& matrix, const Vector2f scale);
+    Matrix3f translate2D(const Matrix3f& matrix, const Vector2f translation);
+    Matrix3f rotate2D(const Matrix3f& matrix, const Angle& angle);
 
     Vector3f rotate(const Vector3f& v, const Angle& angle, const Vector3f& axis);
+
+    Matrix4f orthographic(float left, float right, float top, float bottom, float near, float far);
+    Matrix3f orthographic2D(float left, float right, float top, float bottom);
 }

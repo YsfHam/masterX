@@ -18,6 +18,8 @@ namespace mx
         uint32_t Width;
         uint32_t Height;
 
+        bool Resizable = true;
+
         WindowProps(const std::string title = "App", uint32_t width = 800, uint32_t height = 600)
         :   Title(title), Width(width), Height(height)
         {}

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "instinctsCheck.hpp"
+#include "intrinsicsCheck.hpp"
 
 #include "Vector3f.hpp"
 #include "Vector2f.hpp"
+#include "swizzle.hpp"
 
 #include <iostream>
 
@@ -28,8 +29,31 @@ namespace math3D
         float length2() const;
         Vector4f& normalize();
 
+        std::ostream& print(std::ostream& stream) const;
+
+
     public:
-        float x, y, z, w;
+        union
+        {
+            struct
+            {
+                float x, y, z, w;
+            };
+            SWIZZLE_VEC2(x, y) xy;
+            SWIZZLE_VEC2(x, z) xz;
+            SWIZZLE_VEC2(x, w) xw;
+            SWIZZLE_VEC2(y, x) yx;
+            SWIZZLE_VEC2(y, z) yz;
+            SWIZZLE_VEC2(y, w) yw;
+            SWIZZLE_VEC2(z, x) zx;
+            SWIZZLE_VEC2(z, y) zy;
+            SWIZZLE_VEC2(z, w) zw;
+            SWIZZLE_VEC2(w, x) wx;
+            SWIZZLE_VEC2(w, y) wy;
+            SWIZZLE_VEC2(w, z) wz;
+
+            SWIZZLE_VEC4(x, y, z, w) xyzw;
+        };
 
         static Vector4f Zero;
     };
@@ -53,7 +77,4 @@ namespace math3D
 
     Vector4f min(const Vector4f& v , const Vector4f& u);
     Vector4f max(const Vector4f& v , const Vector4f& u);
-
-    // io
-    std::ostream& operator<<(std::ostream& stream, const Vector4f& v);
 }

@@ -156,8 +156,9 @@ namespace math3D
     }
 
     // io
-    std::ostream& operator<<(std::ostream& stream, const Vector2f& v)
+    std::ostream& Vector2f::print(std::ostream& stream) const
     {
+        const Vector2f& v = *this;
         stream << '(' << v.x << ','
         << v.y << ')';
 

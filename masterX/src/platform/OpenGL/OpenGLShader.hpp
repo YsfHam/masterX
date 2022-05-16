@@ -14,6 +14,8 @@ namespace mx
 
         virtual void bind() override;
         virtual void setUniform(const std::string& name, const math3D::Matrix4f& value) override;
+        virtual void setUniform(const std::string& name, const math3D::Matrix3f& value) override;
+        virtual void setUniform(const std::string& name, const Color& color) override;
     private:
         bool compileShader(const std::string& shaderSource, GLenum shaderType, RendererID& shaderID, std::vector<GLchar>& infoLog);
     private:

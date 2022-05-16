@@ -4,7 +4,7 @@
 #include <string>
 #include <iomanip>
 
-#ifdef USE_INSTRINSICS
+#ifdef USE_INTRINSICS
     #include "simd/sse/Matrix3f_sse.inl"
 #endif
 
@@ -69,8 +69,9 @@ namespace math3D
         return m_matrix[row * 3 + col];
     }
 
-    std::ostream& operator<<(std::ostream& stream, const Matrix3f& m)
+    std::ostream& Matrix3f::print(std::ostream& stream) const
     {
+        const Matrix3f& m = *this;
         int maxWidth = 0;
         if (Matrix3f::PrintFormat == MatrixFormat::BEUTIFY)
         {

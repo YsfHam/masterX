@@ -1,4 +1,5 @@
 #include "math3D/Matrix3f.hpp"
+#include "helpers.hpp"
 
 #include <cstring>
 
@@ -24,7 +25,7 @@ static __m128 loadMatrixRow(float *matrix, float lasValue)
     std::memcpy(row, matrix, 3 * sizeof(float));
     row[3] = lasValue;
 
-    return _mm_load_ps(row);
+    return mm_load_ps(row);
 
 }
 
@@ -141,7 +142,7 @@ namespace math3D
         __m128 _row2 = loadMatrixRow(m_matrix + 3 * 2, 0.0f);
         __m128 _row3 = loadMatrixRow((float*)Matrix3f::Zero.m_matrix, 1.0f);
 
-        __m128 _lVec = _mm_load_ps(lVec);
+        __m128 _lVec = mm_load_ps(lVec);
 
         _row0 = _mm_mul_ps(_row0, _lVec);
         _row1 = _mm_mul_ps(_row1, _lVec);
@@ -162,7 +163,7 @@ namespace math3D
         __m128 _row2 = loadMatrixRow(m_matrix + 3 * 2, 0.0f);
         __m128 _row3 = loadMatrixRow((float*)Matrix3f::Zero.m_matrix, 1.0f);
 
-        __m128 _lVec = _mm_load_ps(lVec);
+        __m128 _lVec = mm_load_ps(lVec);
 
         _row0 = _mm_div_ps(_row0, _lVec);
         _row1 = _mm_div_ps(_row1, _lVec);
@@ -210,7 +211,7 @@ namespace math3D
             {
                 float c = _rows[j][i] / _rows[i][i];
                 float cVec[] = {c, c, c, c};
-                __m128 _cVec = _mm_load_ps(cVec);
+                __m128 _cVec = mm_load_ps(cVec);
                 _rows[j] = _mm_sub_ps(_rows[j], _mm_mul_ps(_cVec, _rows[i]));
             }
         }
@@ -245,7 +246,7 @@ namespace math3D
             {
                 float c = _rows[j][i] / _rows[i][i];
                 float cVec[] = {c, c, c, c};
-                __m128 _cVec = _mm_load_ps(cVec);
+                __m128 _cVec = mm_load_ps(cVec);
                 _rows[j] = _mm_sub_ps(_rows[j], _mm_mul_ps(_cVec, _rows[i]));
                 _id_rows[j] = _mm_sub_ps(_id_rows[j], _mm_mul_ps(_cVec, _id_rows[i]));
             }
@@ -254,13 +255,13 @@ namespace math3D
             {
                 float c = _rows[j][i] / _rows[i][i];
                 float cVec[] = {c, c, c, c};
-                __m128 _cVec = _mm_load_ps(cVec);
+                __m128 _cVec = mm_load_ps(cVec);
                 _rows[j] = _mm_sub_ps(_rows[j], _mm_mul_ps(_cVec, _rows[i]));
                 _id_rows[j] = _mm_sub_ps(_id_rows[j], _mm_mul_ps(_cVec, _id_rows[i]));
             }
 
             float diag[] = {_rows[i][i], _rows[i][i], _rows[i][i], _rows[i][i]};
-            __m128 _diag = _mm_load_ps(diag);
+            __m128 _diag = mm_load_ps(diag);
             _rows[i] = _mm_div_ps(_rows[i], _diag);
             _id_rows[i] = _mm_div_ps(_id_rows[i], _diag);
         }
@@ -388,7 +389,7 @@ namespace math3D
         __m128 _a_row2 = loadMatrixRow((float*)a.m_matrix + 3 * 2, 0.0f);
         __m128 _a_row3 = loadMatrixRow((float*)Matrix3f::Zero.m_matrix, 1.0f);
 
-        __m128 _v = _mm_load_ps((float*)&v);
+        __m128 _v = mm_load_ps((float*)&v);
 
         __m128 _res, _temp;
 
@@ -423,7 +424,7 @@ namespace math3D
         __m128 _row2 = loadMatrixRow((float*)a.m_matrix + 3 * 2, 0.0f);
         __m128 _row3 = loadMatrixRow((float*)Matrix3f::Zero.m_matrix, 1.0f);
 
-        __m128 _lVec = _mm_load_ps(lVec);
+        __m128 _lVec = mm_load_ps(lVec);
 
         _row0 = _mm_mul_ps(_row0, _lVec);
         _row1 = _mm_mul_ps(_row1, _lVec);
@@ -451,7 +452,7 @@ namespace math3D
         __m128 _row2 = loadMatrixRow((float*)a.m_matrix + 3 * 2, 0.0f);
         __m128 _row3 = loadMatrixRow((float*)Matrix3f::Zero.m_matrix, 1.0f);
 
-        __m128 _lVec = _mm_load_ps(lVec);
+        __m128 _lVec = mm_load_ps(lVec);
 
         _row0 = _mm_div_ps(_row0, _lVec);
         _row1 = _mm_div_ps(_row1, _lVec);

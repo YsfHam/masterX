@@ -23,6 +23,10 @@ namespace mx
             : r(red), g(green), b(blue), a(alpha)
         {}
 
+        RGBA8Color(const Color& color)
+            : RGBA8Color(color.r * 255, color.g * 255, color.b * 255, color.a * 255)
+        {}
+
         operator Color()
         {
             const float max = (float)(uint8_t)(~0);

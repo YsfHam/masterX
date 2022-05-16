@@ -6,7 +6,9 @@
 #include "Input/Input.hpp"
 #include "Renderer/Renderer.hpp"
 
-#include "math3D/math3D.hpp"
+//#include "math3D/math3D.hpp"
+
+#include <chrono>
 
 
 mx::Application *mx::Application::s_instance = nullptr;
@@ -54,10 +56,19 @@ void mx::Application::run()
 {
     m_window->pushEventListnerLayer(shared_from_this());
 
+    auto currentFrame = std::chrono::system_clock::now();
+    auto lastFrame = std::chrono::system_clock::now();
     while (m_window->isOpen())
     {
+        currentFrame = std::chrono::system_clock::now();
+        std::chrono::duration<float> duration = currentFrame - lastFrame;
+        
+        float dt = duration.count();
+        lastFrame = currentFrame;
+
+
         for (auto layer : m_layerStack)
-            layer->onUpdate();
+            layer->onUpdate(dt);
 
         if (m_imguiEnabled)
         {

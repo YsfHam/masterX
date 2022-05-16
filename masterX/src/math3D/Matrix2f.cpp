@@ -274,8 +274,9 @@ namespace math3D
         return !(a == b);
     }
 
-    std::ostream& operator<<(std::ostream& stream, const Matrix2f& m)
+    std::ostream& Matrix2f::print(std::ostream& stream) const
     {
+        const Matrix2f& m = *this;
         int maxWidth = 0;
         if (Matrix2f::PrintFormat == MatrixFormat::BEUTIFY)
         {

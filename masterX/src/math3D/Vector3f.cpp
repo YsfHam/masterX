@@ -3,7 +3,7 @@
 #include "math.hpp"
 
 
-#ifdef USE_INSTRINSICS
+#ifdef USE_INTRINSICS
     #include "simd/sse/Vector3f_sse.inl"
 #endif
 
@@ -23,6 +23,11 @@ namespace math3D
         Vector3f(_xyz, _xyz, _xyz)
     {
 
+    }
+
+    Vector3f::Vector3f(const Vector2f& v, float _z)
+        : Vector3f(v.x, v.y, _z)
+    {
     }
 
     Vector3f& Vector3f::operator*=(float l)
@@ -100,8 +105,9 @@ namespace math3D
     }
 
     // io
-    std::ostream& operator<<(std::ostream& stream, const Vector3f& v)
+    std::ostream& Vector3f::print(std::ostream& stream) const
     {
+        const Vector3f& v = *this;
         stream << '(' << v.x << ','
         << v.y << ','
         << v.z << ')';

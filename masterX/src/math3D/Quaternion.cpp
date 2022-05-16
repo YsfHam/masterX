@@ -5,17 +5,17 @@
 namespace math3D
 {
 
-    Quaternion::Quaternion(const Angle& angle, const Vector3f& v)
+    Quaternion::Quaternion(float angle, const Vector3f& v)
         : m_scalar(angle), m_imaginary(v)
     {
     }
 
-    Quaternion::Quaternion(const Angle& angle, float i, float j, float k)
+    Quaternion::Quaternion(float angle, float i, float j, float k)
         : m_scalar(angle), m_imaginary(i, j, k)
     {
     }
 
-    Quaternion::Quaternion(const Angle& angle)
+    Quaternion::Quaternion(float angle)
         : m_scalar(angle), m_imaginary(Vector3f::Zero)
     {
     }
@@ -27,7 +27,7 @@ namespace math3D
 
     Quaternion& Quaternion::operator+=(const Quaternion& q)
     {
-        m_scalar = m_scalar.Degrees + q.m_scalar.Degrees;
+        m_scalar = m_scalar + q.m_scalar;
         m_imaginary += q.m_imaginary;  
 
         return *this; 
@@ -35,7 +35,7 @@ namespace math3D
 
     Quaternion& Quaternion::operator-=(const Quaternion& q)
     {
-        m_scalar = m_scalar.Degrees - q.m_scalar.Degrees;
+        m_scalar = m_scalar - q.m_scalar;
         m_imaginary -= q.m_imaginary; 
 
         return *this;
@@ -43,9 +43,9 @@ namespace math3D
 
     Quaternion& Quaternion::operator*=(const Quaternion& q)
     {
-        m_scalar = m_scalar.Degrees * q.m_scalar.Degrees - dotProduct(m_imaginary, q.m_imaginary);
-        m_imaginary = m_scalar.Degrees * q.m_imaginary + 
-                    q.m_scalar.Degrees * m_imaginary + crossProduct(m_imaginary, q.m_imaginary);
+        m_scalar = m_scalar * q.m_scalar - dotProduct(m_imaginary, q.m_imaginary);
+        m_imaginary = m_scalar * q.m_imaginary + 
+                    q.m_scalar * m_imaginary + crossProduct(m_imaginary, q.m_imaginary);
 
         return *this;
     }
@@ -53,31 +53,31 @@ namespace math3D
 
     Quaternion operator+(const Quaternion& a, const Quaternion& b)
     {
-        return Quaternion(a.m_scalar.Degrees + b.m_scalar.Degrees,
+        return Quaternion(a.m_scalar + b.m_scalar,
                              a.m_imaginary + b.m_imaginary);
     }
 
     Quaternion operator-(const Quaternion& a, const Quaternion& b)
     {
-        return Quaternion(a.m_scalar.Degrees - b.m_scalar.Degrees,
+        return Quaternion(a.m_scalar - b.m_scalar,
                              a.m_imaginary - b.m_imaginary);
     }
     Quaternion operator*(const Quaternion& a, const Quaternion& b)
     {
         return Quaternion(
-            a.m_scalar.Degrees * b.m_scalar.Degrees - dotProduct(a.m_imaginary, b.m_imaginary),
-            a.m_scalar.Degrees * b.m_imaginary + b.m_scalar.Degrees * a.m_imaginary + crossProduct(a.m_imaginary, b.m_imaginary)
+            a.m_scalar * b.m_scalar - dotProduct(a.m_imaginary, b.m_imaginary),
+            a.m_scalar * b.m_imaginary + b.m_scalar * a.m_imaginary + crossProduct(a.m_imaginary, b.m_imaginary)
         );
     }
 
     Quaternion operator*(const Quaternion& a, float b)
     {
-        return Quaternion(a.m_scalar.Degrees * b, a.m_imaginary * b);
+        return Quaternion(a.m_scalar * b, a.m_imaginary * b);
     }
 
     Quaternion operator*(float a, const Quaternion& b)
     {
-        return Quaternion(b.m_scalar.Degrees * a, b.m_imaginary * a);
+        return Quaternion(b.m_scalar * a, b.m_imaginary * a);
     }
 
     Quaternion operator/(const Quaternion& a, const Quaternion& b)
@@ -87,7 +87,7 @@ namespace math3D
 
     Quaternion operator/(const Quaternion& a, float b)
     {
-        return Quaternion(a.m_scalar.Degrees / b, a.m_imaginary / b);
+        return Quaternion(a.m_scalar / b, a.m_imaginary / b);
     }
 
     Quaternion operator/(float a, const Quaternion& b)
@@ -107,7 +107,7 @@ namespace math3D
 
     float norm2(const Quaternion& q)
     {
-        return (q * conjugate(q)).m_scalar.Degrees;
+        return (q * conjugate(q)).m_scalar;
     }
 
     Quaternion normalize(const Quaternion& q)
@@ -120,9 +120,10 @@ namespace math3D
         return conjugate(q) / norm2(q);
     }
 
-    std::ostream& operator<<(std::ostream& stream, const Quaternion& q)
+    std::ostream& Quaternion::print(std::ostream& stream) const
     {
-        stream << q.m_scalar.Degrees;
+        const Quaternion& q = *this;
+        stream << q.m_scalar;
         if (q.m_imaginary.x != 0)
         {
             if (q.m_imaginary.x > 0)

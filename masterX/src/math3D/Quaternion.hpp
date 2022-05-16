@@ -2,19 +2,17 @@
 
 #include "Vector3f.hpp"
 
-#include "math.hpp"
-
 namespace math3D
 {
     class Quaternion
     {
     public:
-        Quaternion(const Angle& angle, const Vector3f& v);
-        Quaternion(const Angle& angle, float i, float j, float k);
-        Quaternion(const Angle& angle);
+        Quaternion(float angle, const Vector3f& v);
+        Quaternion(float angle, float i, float j, float k);
+        Quaternion(float angle);
         Quaternion(float i, float j, float k);
 
-        inline float getReal() {return m_scalar.Degrees; }
+        inline float getReal() {return m_scalar; }
         inline Vector3f getImaginary() { return m_imaginary; }
 
         Quaternion& operator+=(const Quaternion& q);
@@ -37,11 +35,12 @@ namespace math3D
         friend Quaternion normalize(const Quaternion& q);
         friend Quaternion inverse(const Quaternion& q);
 
-        friend std::ostream& operator<<(std::ostream& stream, const Quaternion& q);
+        std::ostream& print(std::ostream& stream) const;
+
 
 
     private:
-        Angle m_scalar;
+        float m_scalar;
 
         Vector3f m_imaginary;
     };

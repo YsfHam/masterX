@@ -1,11 +1,12 @@
 #include "math3D/Vector4f.hpp"
+#include "helpers.hpp"
 
 namespace math3D
 {
     Vector4f& Vector4f::operator+=(const Vector4f& v)
     {
-        __m128 _self = _mm_load_ps((float*)this);
-        __m128 _v = _mm_load_ps((float*)&v);
+        __m128 _self = mm_load_ps((float*)this);
+        __m128 _v = mm_load_ps((float*)&v);
 
         _self = _mm_add_ps(_self, _v);
         x = _self[0];
@@ -18,8 +19,8 @@ namespace math3D
 
     Vector4f& Vector4f::operator-=(const Vector4f& v)
     {
-        __m128 _self = _mm_load_ps((float*)this);
-        __m128 _v = _mm_load_ps((float*)&v);
+        __m128 _self = mm_load_ps((float*)this);
+        __m128 _v = mm_load_ps((float*)&v);
 
         _self = _mm_sub_ps(_self, _v);
         x = _self[0];
@@ -32,8 +33,8 @@ namespace math3D
 
     Vector4f& Vector4f::operator*=(const Vector4f& v)
     {
-        __m128 _self = _mm_load_ps((float*)this);
-        __m128 _v = _mm_load_ps((float*)&v);
+        __m128 _self = mm_load_ps((float*)this);
+        __m128 _v = mm_load_ps((float*)&v);
         _self = _mm_mul_ps(_self, _v);
 
         x = _self[0];
@@ -46,8 +47,8 @@ namespace math3D
 
     Vector4f& Vector4f::operator/=(const Vector4f& v)
     {
-        __m128 _self = _mm_load_ps((float*)this);
-        __m128 _v = _mm_load_ps((float*)&v);
+        __m128 _self = mm_load_ps((float*)this);
+        __m128 _v = mm_load_ps((float*)&v);
         _self = _mm_div_ps(_self, _v);
 
         x = _self[0];
@@ -62,7 +63,7 @@ namespace math3D
         Vector4f copy(*this);
         copy *= copy;
         float sum = copy.x + copy.y + copy.z + copy.w;
-        __m128 _squareRoot = _mm_load_ps(&sum);
+        __m128 _squareRoot = mm_load_ps(&sum);
         _squareRoot = _mm_sqrt_ps(_squareRoot);
         return _squareRoot[0];
     }
@@ -71,8 +72,8 @@ namespace math3D
     {
         Vector4f result = Vector4f::Zero;
 
-        __m128 _v = _mm_load_ps((float*)&v);
-        __m128 _u = _mm_load_ps((float*)&u);
+        __m128 _v = mm_load_ps((float*)&v);
+        __m128 _u = mm_load_ps((float*)&u);
 
         __m128 _result = _mm_add_ps(_v, _u);
 
@@ -88,8 +89,8 @@ namespace math3D
     {
         Vector4f result = Vector4f::Zero;
 
-        __m128 _v = _mm_load_ps((float*)&v);
-        __m128 _u = _mm_load_ps((float*)&u);
+        __m128 _v = mm_load_ps((float*)&v);
+        __m128 _u = mm_load_ps((float*)&u);
 
         __m128 _result = _mm_sub_ps(_v, _u);
 
@@ -105,8 +106,8 @@ namespace math3D
     {
         Vector4f result = Vector4f::Zero;
 
-        __m128 _v = _mm_load_ps((float*)&v);
-        __m128 _u = _mm_load_ps((float*)&u);
+        __m128 _v = mm_load_ps((float*)&v);
+        __m128 _u = mm_load_ps((float*)&u);
 
         __m128 _result = _mm_mul_ps(_v, _u);
 
@@ -124,8 +125,8 @@ namespace math3D
 
         float lVec[] = {l, l, l, l};
 
-        __m128 _v = _mm_load_ps((float*)&v);
-        __m128 _l = _mm_load_ps(lVec);
+        __m128 _v = mm_load_ps((float*)&v);
+        __m128 _l = mm_load_ps(lVec);
 
         __m128 _result = _mm_mul_ps(_v, _l);
 
@@ -141,8 +142,8 @@ namespace math3D
     {
         Vector4f result = Vector4f::Zero;
 
-        __m128 _v = _mm_load_ps((float*)&v);
-        __m128 _u = _mm_load_ps((float*)&u);
+        __m128 _v = mm_load_ps((float*)&v);
+        __m128 _u = mm_load_ps((float*)&u);
 
         __m128 _result = _mm_div_ps(_v, _u);
 
@@ -160,8 +161,8 @@ namespace math3D
 
         float lVec[] = {l, l, l, l};
 
-        __m128 _v = _mm_load_ps((float*)&v);
-        __m128 _l = _mm_load_ps(lVec);
+        __m128 _v = mm_load_ps((float*)&v);
+        __m128 _l = mm_load_ps(lVec);
 
         __m128 _result = _mm_div_ps(_l, _v);
 
@@ -179,8 +180,8 @@ namespace math3D
 
         float lVec[] = {l, l, l, l};
 
-        __m128 _v = _mm_load_ps((float*)&v);
-        __m128 _l = _mm_load_ps(lVec);
+        __m128 _v = mm_load_ps((float*)&v);
+        __m128 _l = mm_load_ps(lVec);
 
         __m128 _result = _mm_div_ps(_v, _l);
 
@@ -194,8 +195,8 @@ namespace math3D
 
     Vector4f min(const Vector4f& v , const Vector4f& u)
     {
-        __m128 _v = _mm_load_ps((float*)&v);
-        __m128 _u = _mm_load_ps((float*)&u);
+        __m128 _v = mm_load_ps((float*)&v);
+        __m128 _u = mm_load_ps((float*)&u);
 
         __m128 _max = _mm_min_ps(_v, _u);
 
@@ -204,8 +205,8 @@ namespace math3D
 
     Vector4f max(const Vector4f& v , const Vector4f& u)
     {
-        __m128 _v = _mm_load_ps((float*)&v);
-        __m128 _u = _mm_load_ps((float*)&u);
+        __m128 _v = mm_load_ps((float*)&v);
+        __m128 _u = mm_load_ps((float*)&u);
 
         __m128 _max = _mm_max_ps(_v, _u);
 

@@ -1,4 +1,5 @@
 #include "math3D/Matrix4f.hpp"
+#include "helpers.hpp"
 
 static void buildMatrix(float *matrix, __m128 row0, __m128 row1, __m128 row2, __m128 row3) 
 {
@@ -27,15 +28,15 @@ namespace math3D
 {
     Matrix4f& Matrix4f::operator+=(const Matrix4f& m)
     {
-        __m128 _row0 = _mm_load_ps(m_matrix + 4 * 0);
-        __m128 _row1 = _mm_load_ps(m_matrix + 4 * 1);
-        __m128 _row2 = _mm_load_ps(m_matrix + 4 * 2);
-        __m128 _row3 = _mm_load_ps(m_matrix + 4 * 3);
+        __m128 _row0 = mm_load_ps(m_matrix + 4 * 0);
+        __m128 _row1 = mm_load_ps(m_matrix + 4 * 1);
+        __m128 _row2 = mm_load_ps(m_matrix + 4 * 2);
+        __m128 _row3 = mm_load_ps(m_matrix + 4 * 3);
 
-        __m128 _m_row0 = _mm_load_ps(m.m_matrix + 4 * 0);
-        __m128 _m_row1 = _mm_load_ps(m.m_matrix + 4 * 1);
-        __m128 _m_row2 = _mm_load_ps(m.m_matrix + 4 * 2);
-        __m128 _m_row3 = _mm_load_ps(m.m_matrix + 4 * 3);
+        __m128 _m_row0 = mm_load_ps(m.m_matrix + 4 * 0);
+        __m128 _m_row1 = mm_load_ps(m.m_matrix + 4 * 1);
+        __m128 _m_row2 = mm_load_ps(m.m_matrix + 4 * 2);
+        __m128 _m_row3 = mm_load_ps(m.m_matrix + 4 * 3);
 
         _row0 = _mm_add_ps(_row0, _m_row0);
         _row1 = _mm_add_ps(_row1, _m_row1);
@@ -49,15 +50,15 @@ namespace math3D
 
     Matrix4f& Matrix4f::operator-=(const Matrix4f& m)
     {
-        __m128 _row0 = _mm_load_ps(m_matrix + 4 * 0);
-        __m128 _row1 = _mm_load_ps(m_matrix + 4 * 1);
-        __m128 _row2 = _mm_load_ps(m_matrix + 4 * 2);
-        __m128 _row3 = _mm_load_ps(m_matrix + 4 * 3);
+        __m128 _row0 = mm_load_ps(m_matrix + 4 * 0);
+        __m128 _row1 = mm_load_ps(m_matrix + 4 * 1);
+        __m128 _row2 = mm_load_ps(m_matrix + 4 * 2);
+        __m128 _row3 = mm_load_ps(m_matrix + 4 * 3);
 
-        __m128 _m_row0 = _mm_load_ps(m.m_matrix + 4 * 0);
-        __m128 _m_row1 = _mm_load_ps(m.m_matrix + 4 * 1);
-        __m128 _m_row2 = _mm_load_ps(m.m_matrix + 4 * 2);
-        __m128 _m_row3 = _mm_load_ps(m.m_matrix + 4 * 3);
+        __m128 _m_row0 = mm_load_ps(m.m_matrix + 4 * 0);
+        __m128 _m_row1 = mm_load_ps(m.m_matrix + 4 * 1);
+        __m128 _m_row2 = mm_load_ps(m.m_matrix + 4 * 2);
+        __m128 _m_row3 = mm_load_ps(m.m_matrix + 4 * 3);
 
         _row0 = _mm_sub_ps(_row0, _m_row0);
         _row1 = _mm_sub_ps(_row1, _m_row1);
@@ -74,15 +75,15 @@ namespace math3D
         Matrix4f trans_m(0.0f);
         m.transpose(trans_m);
 
-        __m128 _row0 = _mm_load_ps(m_matrix + 4 * 0);
-        __m128 _row1 = _mm_load_ps(m_matrix + 4 * 1);
-        __m128 _row2 = _mm_load_ps(m_matrix + 4 * 2);
-        __m128 _row3 = _mm_load_ps(m_matrix + 4 * 3);
+        __m128 _row0 = mm_load_ps(m_matrix + 4 * 0);
+        __m128 _row1 = mm_load_ps(m_matrix + 4 * 1);
+        __m128 _row2 = mm_load_ps(m_matrix + 4 * 2);
+        __m128 _row3 = mm_load_ps(m_matrix + 4 * 3);
 
-        __m128 _m_col0 = _mm_load_ps(trans_m.m_matrix + 4 * 0);
-        __m128 _m_col1 = _mm_load_ps(trans_m.m_matrix + 4 * 1);
-        __m128 _m_col2 = _mm_load_ps(trans_m.m_matrix + 4 * 2);
-        __m128 _m_col3 = _mm_load_ps(trans_m.m_matrix + 4 * 3);
+        __m128 _m_col0 = mm_load_ps(trans_m.m_matrix + 4 * 0);
+        __m128 _m_col1 = mm_load_ps(trans_m.m_matrix + 4 * 1);
+        __m128 _m_col2 = mm_load_ps(trans_m.m_matrix + 4 * 2);
+        __m128 _m_col3 = mm_load_ps(trans_m.m_matrix + 4 * 3);
 
         __m128 _res0, _res1, _res2, _res3, _temp;
 
@@ -132,12 +133,12 @@ namespace math3D
     {
         float lVec[] = {l, l, l, l};
 
-        __m128 _row0 = _mm_load_ps(m_matrix + 4 * 0);
-        __m128 _row1 = _mm_load_ps(m_matrix + 4 * 1);
-        __m128 _row2 = _mm_load_ps(m_matrix + 4 * 2);
-        __m128 _row3 = _mm_load_ps(m_matrix + 4 * 3);
+        __m128 _row0 = mm_load_ps(m_matrix + 4 * 0);
+        __m128 _row1 = mm_load_ps(m_matrix + 4 * 1);
+        __m128 _row2 = mm_load_ps(m_matrix + 4 * 2);
+        __m128 _row3 = mm_load_ps(m_matrix + 4 * 3);
 
-        __m128 _lVec = _mm_load_ps(lVec);
+        __m128 _lVec = mm_load_ps(lVec);
 
         _row0 = _mm_mul_ps(_row0, _lVec);
         _row1 = _mm_mul_ps(_row1, _lVec);
@@ -153,12 +154,12 @@ namespace math3D
     {
         float lVec[] = {l, l, l, l};
 
-        __m128 _row0 = _mm_load_ps(m_matrix + 4 * 0);
-        __m128 _row1 = _mm_load_ps(m_matrix + 4 * 1);
-        __m128 _row2 = _mm_load_ps(m_matrix + 4 * 2);
-        __m128 _row3 = _mm_load_ps(m_matrix + 4 * 3);
+        __m128 _row0 = mm_load_ps(m_matrix + 4 * 0);
+        __m128 _row1 = mm_load_ps(m_matrix + 4 * 1);
+        __m128 _row2 = mm_load_ps(m_matrix + 4 * 2);
+        __m128 _row3 = mm_load_ps(m_matrix + 4 * 3);
 
-        __m128 _lVec = _mm_load_ps(lVec);
+        __m128 _lVec = mm_load_ps(lVec);
 
         _row0 = _mm_div_ps(_row0, _lVec);
         _row1 = _mm_div_ps(_row1, _lVec);
@@ -172,10 +173,10 @@ namespace math3D
 
     Matrix4f& Matrix4f::transpose()
     {
-        __m128 _row0 = _mm_load_ps(m_matrix + 4 * 0);
-        __m128 _row1 = _mm_load_ps(m_matrix + 4 * 1);
-        __m128 _row2 = _mm_load_ps(m_matrix + 4 * 2);
-        __m128 _row3 = _mm_load_ps(m_matrix + 4 * 3);
+        __m128 _row0 = mm_load_ps(m_matrix + 4 * 0);
+        __m128 _row1 = mm_load_ps(m_matrix + 4 * 1);
+        __m128 _row2 = mm_load_ps(m_matrix + 4 * 2);
+        __m128 _row3 = mm_load_ps(m_matrix + 4 * 3);
 
         _MM_TRANSPOSE4_PS(_row0, _row1, _row2, _row3);
         buildMatrix(m_matrix, _row0, _row1, _row2, _row3);
@@ -185,10 +186,10 @@ namespace math3D
     
     void Matrix4f::transpose(Matrix4f& m) const
     {
-        __m128 _row0 = _mm_load_ps(m_matrix + 4 * 0);
-        __m128 _row1 = _mm_load_ps(m_matrix + 4 * 1);
-        __m128 _row2 = _mm_load_ps(m_matrix + 4 * 2);
-        __m128 _row3 = _mm_load_ps(m_matrix + 4 * 3);
+        __m128 _row0 = mm_load_ps(m_matrix + 4 * 0);
+        __m128 _row1 = mm_load_ps(m_matrix + 4 * 1);
+        __m128 _row2 = mm_load_ps(m_matrix + 4 * 2);
+        __m128 _row3 = mm_load_ps(m_matrix + 4 * 3);
 
         _MM_TRANSPOSE4_PS(_row0, _row1, _row2, _row3);
 
@@ -198,10 +199,10 @@ namespace math3D
     float Matrix4f::det() const
     {
         __m128 _rows[4] = {
-            _mm_load_ps(m_matrix + 4 * 0),
-            _mm_load_ps(m_matrix + 4 * 1),
-            _mm_load_ps(m_matrix + 4 * 2),
-            _mm_load_ps(m_matrix + 4 * 3),
+            mm_load_ps(m_matrix + 4 * 0),
+            mm_load_ps(m_matrix + 4 * 1),
+            mm_load_ps(m_matrix + 4 * 2),
+            mm_load_ps(m_matrix + 4 * 3),
         };
 
         for (int i = 0; i < 4; i++)
@@ -212,7 +213,7 @@ namespace math3D
             {
                 float c = _rows[j][i] / _rows[i][i];
                 float cVec[] = {c, c, c, c};
-                __m128 _cVec = _mm_load_ps(cVec);
+                __m128 _cVec = mm_load_ps(cVec);
                 _rows[j] = _mm_sub_ps(_rows[j], _mm_mul_ps(_cVec, _rows[i]));
             }
         }
@@ -228,17 +229,17 @@ namespace math3D
         const Matrix4f& id = Matrix4f::Identity;
 
          __m128 _rows[4] = {
-            _mm_load_ps(m_matrix + 4 * 0),
-            _mm_load_ps(m_matrix + 4 * 1),
-            _mm_load_ps(m_matrix + 4 * 2),
-            _mm_load_ps(m_matrix + 4 * 3),
+            mm_load_ps(m_matrix + 4 * 0),
+            mm_load_ps(m_matrix + 4 * 1),
+            mm_load_ps(m_matrix + 4 * 2),
+            mm_load_ps(m_matrix + 4 * 3),
         };
 
         __m128 _id_rows[4] = {
-            _mm_load_ps(id.m_matrix + 4 * 0),
-            _mm_load_ps(id.m_matrix + 4 * 1),
-            _mm_load_ps(id.m_matrix + 4 * 2),
-            _mm_load_ps(id.m_matrix + 4 * 3),
+            mm_load_ps(id.m_matrix + 4 * 0),
+            mm_load_ps(id.m_matrix + 4 * 1),
+            mm_load_ps(id.m_matrix + 4 * 2),
+            mm_load_ps(id.m_matrix + 4 * 3),
         };
 
         for (int i = 0; i < 4; i++)
@@ -247,7 +248,7 @@ namespace math3D
             {
                 float c = _rows[j][i] / _rows[i][i];
                 float cVec[] = {c, c, c, c};
-                __m128 _cVec = _mm_load_ps(cVec);
+                __m128 _cVec = mm_load_ps(cVec);
                 _rows[j] = _mm_sub_ps(_rows[j], _mm_mul_ps(_cVec, _rows[i]));
                 _id_rows[j] = _mm_sub_ps(_id_rows[j], _mm_mul_ps(_cVec, _id_rows[i]));
             }
@@ -256,13 +257,13 @@ namespace math3D
             {
                 float c = _rows[j][i] / _rows[i][i];
                 float cVec[] = {c, c, c, c};
-                __m128 _cVec = _mm_load_ps(cVec);
+                __m128 _cVec = mm_load_ps(cVec);
                 _rows[j] = _mm_sub_ps(_rows[j], _mm_mul_ps(_cVec, _rows[i]));
                 _id_rows[j] = _mm_sub_ps(_id_rows[j], _mm_mul_ps(_cVec, _id_rows[i]));
             }
 
             float diag[] = {_rows[i][i], _rows[i][i], _rows[i][i], _rows[i][i]};
-            __m128 _diag = _mm_load_ps(diag);
+            __m128 _diag = mm_load_ps(diag);
             _rows[i] = _mm_div_ps(_rows[i], _diag);
             _id_rows[i] = _mm_div_ps(_id_rows[i], _diag);
         }
@@ -277,15 +278,15 @@ namespace math3D
     {
         Matrix4f result(0.0f);
 
-        __m128 _a_row0 = _mm_load_ps(a.m_matrix + 4 * 0);
-        __m128 _a_row1 = _mm_load_ps(a.m_matrix + 4 * 1);
-        __m128 _a_row2 = _mm_load_ps(a.m_matrix + 4 * 2);
-        __m128 _a_row3 = _mm_load_ps(a.m_matrix + 4 * 3);
+        __m128 _a_row0 = mm_load_ps(a.m_matrix + 4 * 0);
+        __m128 _a_row1 = mm_load_ps(a.m_matrix + 4 * 1);
+        __m128 _a_row2 = mm_load_ps(a.m_matrix + 4 * 2);
+        __m128 _a_row3 = mm_load_ps(a.m_matrix + 4 * 3);
 
-        __m128 _b_row0 = _mm_load_ps(b.m_matrix + 4 * 0);
-        __m128 _b_row1 = _mm_load_ps(b.m_matrix + 4 * 1);
-        __m128 _b_row2 = _mm_load_ps(b.m_matrix + 4 * 2);
-        __m128 _b_row3 = _mm_load_ps(b.m_matrix + 4 * 3);
+        __m128 _b_row0 = mm_load_ps(b.m_matrix + 4 * 0);
+        __m128 _b_row1 = mm_load_ps(b.m_matrix + 4 * 1);
+        __m128 _b_row2 = mm_load_ps(b.m_matrix + 4 * 2);
+        __m128 _b_row3 = mm_load_ps(b.m_matrix + 4 * 3);
 
         __m128 _row0, _row1, _row2, _row3;
 
@@ -302,15 +303,15 @@ namespace math3D
     {
         Matrix4f result(0.0f);
 
-        __m128 _a_row0 = _mm_load_ps(a.m_matrix + 4 * 0);
-        __m128 _a_row1 = _mm_load_ps(a.m_matrix + 4 * 1);
-        __m128 _a_row2 = _mm_load_ps(a.m_matrix + 4 * 2);
-        __m128 _a_row3 = _mm_load_ps(a.m_matrix + 4 * 3);
+        __m128 _a_row0 = mm_load_ps(a.m_matrix + 4 * 0);
+        __m128 _a_row1 = mm_load_ps(a.m_matrix + 4 * 1);
+        __m128 _a_row2 = mm_load_ps(a.m_matrix + 4 * 2);
+        __m128 _a_row3 = mm_load_ps(a.m_matrix + 4 * 3);
 
-        __m128 _b_row0 = _mm_load_ps(b.m_matrix + 4 * 0);
-        __m128 _b_row1 = _mm_load_ps(b.m_matrix + 4 * 1);
-        __m128 _b_row2 = _mm_load_ps(b.m_matrix + 4 * 2);
-        __m128 _b_row3 = _mm_load_ps(b.m_matrix + 4 * 3);
+        __m128 _b_row0 = mm_load_ps(b.m_matrix + 4 * 0);
+        __m128 _b_row1 = mm_load_ps(b.m_matrix + 4 * 1);
+        __m128 _b_row2 = mm_load_ps(b.m_matrix + 4 * 2);
+        __m128 _b_row3 = mm_load_ps(b.m_matrix + 4 * 3);
 
         __m128 _row0, _row1, _row2, _row3;
 
@@ -330,15 +331,15 @@ namespace math3D
 
         Matrix4f result(0.0f);
 
-        __m128 _a_row0 = _mm_load_ps(a.m_matrix + 4 * 0);
-        __m128 _a_row1 = _mm_load_ps(a.m_matrix + 4 * 1);
-        __m128 _a_row2 = _mm_load_ps(a.m_matrix + 4 * 2);
-        __m128 _a_row3 = _mm_load_ps(a.m_matrix + 4 * 3);
+        __m128 _a_row0 = mm_load_ps(a.m_matrix + 4 * 0);
+        __m128 _a_row1 = mm_load_ps(a.m_matrix + 4 * 1);
+        __m128 _a_row2 = mm_load_ps(a.m_matrix + 4 * 2);
+        __m128 _a_row3 = mm_load_ps(a.m_matrix + 4 * 3);
 
-        __m128 _b_col0 = _mm_load_ps(trans_b.m_matrix + 4 * 0);
-        __m128 _b_col1 = _mm_load_ps(trans_b.m_matrix + 4 * 1);
-        __m128 _b_col2 = _mm_load_ps(trans_b.m_matrix + 4 * 2);
-        __m128 _b_col3 = _mm_load_ps(trans_b.m_matrix + 4 * 3);
+        __m128 _b_col0 = mm_load_ps(trans_b.m_matrix + 4 * 0);
+        __m128 _b_col1 = mm_load_ps(trans_b.m_matrix + 4 * 1);
+        __m128 _b_col2 = mm_load_ps(trans_b.m_matrix + 4 * 2);
+        __m128 _b_col3 = mm_load_ps(trans_b.m_matrix + 4 * 3);
 
         __m128 _res0, _res1, _res2, _res3, _temp;
 
@@ -385,12 +386,12 @@ namespace math3D
 
     Vector4f operator*(const Matrix4f& a, const Vector4f& v)
     {
-        __m128 _a_row0 = _mm_load_ps(a.m_matrix + 4 * 0);
-        __m128 _a_row1 = _mm_load_ps(a.m_matrix + 4 * 1);
-        __m128 _a_row2 = _mm_load_ps(a.m_matrix + 4 * 2);
-        __m128 _a_row3 = _mm_load_ps(a.m_matrix + 4 * 3);
+        __m128 _a_row0 = mm_load_ps(a.m_matrix + 4 * 0);
+        __m128 _a_row1 = mm_load_ps(a.m_matrix + 4 * 1);
+        __m128 _a_row2 = mm_load_ps(a.m_matrix + 4 * 2);
+        __m128 _a_row3 = mm_load_ps(a.m_matrix + 4 * 3);
 
-        __m128 _v = _mm_load_ps((float*)&v);
+        __m128 _v = mm_load_ps((float*)&v);
 
         __m128 _res, _temp;
 
@@ -418,12 +419,12 @@ namespace math3D
 
         Matrix4f res(0.0f);
 
-        __m128 _row0 = _mm_load_ps(a.m_matrix + 4 * 0);
-        __m128 _row1 = _mm_load_ps(a.m_matrix + 4 * 1);
-        __m128 _row2 = _mm_load_ps(a.m_matrix + 4 * 2);
-        __m128 _row3 = _mm_load_ps(a.m_matrix + 4 * 3);
+        __m128 _row0 = mm_load_ps(a.m_matrix + 4 * 0);
+        __m128 _row1 = mm_load_ps(a.m_matrix + 4 * 1);
+        __m128 _row2 = mm_load_ps(a.m_matrix + 4 * 2);
+        __m128 _row3 = mm_load_ps(a.m_matrix + 4 * 3);
 
-        __m128 _lVec = _mm_load_ps(lVec);
+        __m128 _lVec = mm_load_ps(lVec);
 
         _row0 = _mm_mul_ps(_row0, _lVec);
         _row1 = _mm_mul_ps(_row1, _lVec);
@@ -446,12 +447,12 @@ namespace math3D
 
         Matrix4f res(0.0f);
 
-        __m128 _row0 = _mm_load_ps(a.m_matrix + 4 * 0);
-        __m128 _row1 = _mm_load_ps(a.m_matrix + 4 * 1);
-        __m128 _row2 = _mm_load_ps(a.m_matrix + 4 * 2);
-        __m128 _row3 = _mm_load_ps(a.m_matrix + 4 * 3);
+        __m128 _row0 = mm_load_ps(a.m_matrix + 4 * 0);
+        __m128 _row1 = mm_load_ps(a.m_matrix + 4 * 1);
+        __m128 _row2 = mm_load_ps(a.m_matrix + 4 * 2);
+        __m128 _row3 = mm_load_ps(a.m_matrix + 4 * 3);
 
-        __m128 _lVec = _mm_load_ps(lVec);
+        __m128 _lVec = mm_load_ps(lVec);
 
         _row0 = _mm_div_ps(_row0, _lVec);
         _row1 = _mm_div_ps(_row1, _lVec);
@@ -465,15 +466,15 @@ namespace math3D
 
     bool operator==(const Matrix4f& a, const Matrix4f& b)
     {
-        __m128 _a_row0 = _mm_load_ps(a.m_matrix + 4 * 0);
-        __m128 _a_row1 = _mm_load_ps(a.m_matrix + 4 * 1);
-        __m128 _a_row2 = _mm_load_ps(a.m_matrix + 4 * 2);
-        __m128 _a_row3 = _mm_load_ps(a.m_matrix + 4 * 3);
+        __m128 _a_row0 = mm_load_ps(a.m_matrix + 4 * 0);
+        __m128 _a_row1 = mm_load_ps(a.m_matrix + 4 * 1);
+        __m128 _a_row2 = mm_load_ps(a.m_matrix + 4 * 2);
+        __m128 _a_row3 = mm_load_ps(a.m_matrix + 4 * 3);
 
-        __m128 _b_row0 = _mm_load_ps(b.m_matrix + 4 * 0);
-        __m128 _b_row1 = _mm_load_ps(b.m_matrix + 4 * 1);
-        __m128 _b_row2 = _mm_load_ps(b.m_matrix + 4 * 2);
-        __m128 _b_row3 = _mm_load_ps(b.m_matrix + 4 * 3);
+        __m128 _b_row0 = mm_load_ps(b.m_matrix + 4 * 0);
+        __m128 _b_row1 = mm_load_ps(b.m_matrix + 4 * 1);
+        __m128 _b_row2 = mm_load_ps(b.m_matrix + 4 * 2);
+        __m128 _b_row3 = mm_load_ps(b.m_matrix + 4 * 3);
 
         __m128 _dst;
         _dst = _mm_cmpeq_ps(_a_row0, _b_row0);

@@ -19,7 +19,6 @@ project "sandbox"
         "%{Includes.spdlog}",
         "%{Includes.GLFW}",
         "%{Includes.Imgui}",
-        "%{Includes.math3D}",
     }
 
     links
@@ -28,7 +27,6 @@ project "sandbox"
         "GLFW",
         "glad",
         "Imgui",
-        "math3D",
 
         "CoreFoundation.framework",
         "Cocoa.framework",
@@ -40,7 +38,7 @@ project "sandbox"
 
     defines
     {
-        "USE_INSTRINSICS"
+        "USE_INTRINSICS"
     }
 
     filter "configurations:Debug"

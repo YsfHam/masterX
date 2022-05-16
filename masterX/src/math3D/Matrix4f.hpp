@@ -24,8 +24,6 @@ namespace math3D
         float& operator()(size_t row, size_t col);
         float operator()(size_t row, size_t col) const;
 
-         float const* getMatPtr() const { return m_matrix; }
-
         float det() const;
         Matrix4f& inverse();
 
@@ -41,7 +39,9 @@ namespace math3D
         friend bool operator==(const Matrix4f& a, const Matrix4f& b);
         friend bool operator!=(const Matrix4f& a, const Matrix4f& b);
 
-        friend std::ostream& operator<<(std::ostream& stream, const Matrix4f&);
+
+        std::ostream& print(std::ostream& stream) const;
+
 
     public:
 

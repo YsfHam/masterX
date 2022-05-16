@@ -44,7 +44,8 @@ namespace math3D
         friend bool operator==(const Matrix3f& a, const Matrix3f& b);
         friend bool operator!=(const Matrix3f& a, const Matrix3f& b);
 
-        friend std::ostream& operator<<(std::ostream& stream, const Matrix3f&);
+
+        std::ostream& print(std::ostream& stream) const;
 
     public:
 

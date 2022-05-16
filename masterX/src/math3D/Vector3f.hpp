@@ -1,6 +1,7 @@
 #pragma once
 
-#include "instinctsCheck.hpp"
+#include "intrinsicsCheck.hpp"
+#include "Vector2f.hpp"
 
 #include <iostream>
 
@@ -11,6 +12,7 @@ namespace math3D
     public:
         Vector3f(float _x, float _y, float _z = 0.f);
         Vector3f(float _xyz);
+        Vector3f(const Vector2f& v, float _z = 0.f);
         
         Vector3f& operator+=(const Vector3f& v);
         Vector3f& operator-=(const Vector3f& v);
@@ -22,6 +24,9 @@ namespace math3D
         float length() const;
         float length2() const;
         Vector3f& normalize();
+
+        std::ostream& print(std::ostream& stream) const;
+
 
     public:
         float x, y, z;
@@ -49,7 +54,4 @@ namespace math3D
 
     Vector3f min(const Vector3f& v , const Vector3f& u);
     Vector3f max(const Vector3f& v , const Vector3f& u);
-
-    // io
-    std::ostream& operator<<(std::ostream& stream, const Vector3f& v);
 }
