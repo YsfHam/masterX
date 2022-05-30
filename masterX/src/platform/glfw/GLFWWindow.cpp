@@ -70,6 +70,16 @@ mx::GLFWWindow::GLFWWindow(const WindowProps& windowProps)
         data.EventsQueue.push(new WindowResizeEvent(width, height));
     });
 
+    glfwSetWindowIconifyCallback(m_window, [](GLFWwindow *window, int iconified){
+        WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+        data.EventsQueue.push(new WindowMinimizeEvent(iconified));
+    });
+
+    glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow *window, int width, int height){
+        WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+        data.EventsQueue.push(new WindowFramebufferResizeEvent(width, height));
+    });
+
     glfwSetKeyCallback(m_window, [](GLFWwindow *window, int key, int scancode, int action, int mods){
         WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
         Event *e;

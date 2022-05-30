@@ -12,6 +12,8 @@ namespace mx
         void move(const math3D::Vector2f& posOffset);
         void setPosition(const math3D::Vector2f& position);
 
+        void setProjection(float left, float right, float top, float bottom);
+
         void setRotation(const math3D::Angle& angle);
         void rotate(const math3D::Angle& angle);
 
@@ -25,8 +27,8 @@ namespace mx
         math3D::Angle m_rotation;
 
         math3D::Matrix3f m_projection;
-
         math3D::Matrix3f m_view;
+        math3D::Matrix3f m_pv;
         bool m_transformChanged;
     };
 }

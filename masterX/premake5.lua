@@ -21,6 +21,7 @@ project "masterX"
         "GLFW",
         "glad",
         "Imgui",
+        "stb_image",
 
 
         "CoreFoundation.framework",
@@ -37,6 +38,7 @@ project "masterX"
         "%{Includes.GLFW}",
         "%{Includes.glad}",
         "%{Includes.Imgui}",
+        "%{Includes.stbImage}",
     }
 
     defines

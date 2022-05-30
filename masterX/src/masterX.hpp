@@ -21,6 +21,7 @@
 #include "Renderer/Renderer.hpp"
 #include "Renderer/Shader.hpp"
 #include "Renderer/Camera2D.hpp"
+#include "Renderer/Texture.hpp"
 
 // math
 #include "math3D/math3D.hpp"

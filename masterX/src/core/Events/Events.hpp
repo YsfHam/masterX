@@ -7,7 +7,7 @@ namespace mx
     enum class EventType
     {
         None = 0,
-        WindowClose, WindowResize, WindowMinimize, WindowMaximize, WindowFocus, WindowLostFocus, WindowMoved,
+        WindowClose, WindowResize, WindowFramebufferResize, WindowMinimize, WindowMaximize, WindowFocus, WindowLostFocus, WindowMoved,
         KeyPressed, KeyReleased,
         MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
     };

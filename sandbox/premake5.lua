@@ -27,6 +27,7 @@ project "sandbox"
         "GLFW",
         "glad",
         "Imgui",
+        "stb_image",
 
         "CoreFoundation.framework",
         "Cocoa.framework",

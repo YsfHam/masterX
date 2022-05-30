@@ -2,7 +2,7 @@
 
 #include "mxpch.hpp"
 
-#include "core/Assert.hpp"
+#include "memory.hpp"
 
 namespace mx
 {
@@ -13,7 +13,10 @@ namespace mx
         template<typename ...Args>
         static Ref<T> Create(Args&&...args)
         {
-            return std::make_shared<T>(std::forward<Args>(args)...);
+            //return std::make_shared<T>(std::forward<Args>(args)...);
+            return std::shared_ptr<T>(MX_ALLOCATE(T, args...), [](T *ptr){
+                MX_FREE(ptr);
+            });
         }
         template <typename U>
         Ref(const std::shared_ptr<U>& ref)
@@ -27,13 +30,6 @@ namespace mx
         Ref(std::nullptr_t null)
         : std::shared_ptr<T>(null)
         {}
-
-        T* operator->()
-        {
-            MX_CORE_ASSERT(this->get() != nullptr, "Null pointer access");
-
-            return std::shared_ptr<T>::operator->();
-        }
     };
 
     template<typename T>
@@ -59,13 +55,6 @@ namespace mx
         Scope(std::nullptr_t null)
         : std::unique_ptr<T>(null)
         {}
-
-        T* operator->()
-        {
-            MX_CORE_ASSERT(this->get() != nullptr, "Null pointer access");
-
-            return std::unique_ptr<T>::operator->();
-        }
     };
 
     using RendererID = uint32_t;

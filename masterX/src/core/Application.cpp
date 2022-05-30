@@ -5,8 +5,8 @@
 #include "Assert.hpp"
 #include "Input/Input.hpp"
 #include "Renderer/Renderer.hpp"
+#include "Timer.hpp"
 
-//#include "math3D/math3D.hpp"
 
 #include <chrono>
 
@@ -15,7 +15,8 @@ mx::Application *mx::Application::s_instance = nullptr;
 
 mx::Application::Application(const AppSettings& settings) 
     : m_cmdArgs(settings.args), m_imguiEnabled(settings.EnableImGui),
-    m_windowAPI(settings.WinAPI), m_rendererAPI(settings.GraphicsAPI)
+    m_windowAPI(settings.WinAPI), m_rendererAPI(settings.GraphicsAPI),
+    m_mimimized(false)
 {
     MX_CORE_ASSERT(s_instance == nullptr, "Application already created");
     s_instance = this;
@@ -54,21 +55,16 @@ void mx::Application::pushOverlay(mx::Ref<Layer> overlay)
 
 void mx::Application::run() 
 {
-    m_window->pushEventListnerLayer(shared_from_this());
+    m_window->pushEventListnerOverlay(shared_from_this());
 
-    auto currentFrame = std::chrono::system_clock::now();
-    auto lastFrame = std::chrono::system_clock::now();
+    Timer timer;
     while (m_window->isOpen())
     {
-        currentFrame = std::chrono::system_clock::now();
-        std::chrono::duration<float> duration = currentFrame - lastFrame;
-        
-        float dt = duration.count();
-        lastFrame = currentFrame;
-
-
-        for (auto layer : m_layerStack)
-            layer->onUpdate(dt);
+        if (!m_mimimized)
+        {
+            for (auto layer : m_layerStack)
+                layer->onUpdate(timer.restart());
+        }
 
         if (m_imguiEnabled)
         {
@@ -94,4 +90,21 @@ bool mx::Application::onWindowClose(WindowCloseEvent& e)
     m_window->close();
 
     return true;
+}
+
+bool mx::Application::onWindowResize(WindowResizeEvent& e)
+{
+    return false;
+}
+
+bool mx::Application::onWindowFramebufferResize(WindowFramebufferResizeEvent& e)
+{
+    RendererCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
+    return false;
+}
+
+bool mx::Application::onWindowMinimize(WindowMinimizeEvent& e)
+{
+    m_mimimized = e.Minimized;
+    return false;
 }

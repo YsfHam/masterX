@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Events/EventsListener.hpp"
+#include "Timer.hpp"
 
 namespace mx
 {
@@ -11,7 +12,7 @@ namespace mx
 
         virtual void onAttach() {}
         virtual void onDetach() {}
-        virtual void onUpdate(float dt) {}
+        virtual void onUpdate(Time dt) {}
         virtual void onImguiRender() {}
     };
 }

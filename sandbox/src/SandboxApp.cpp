@@ -15,8 +15,6 @@ struct Quad
     math3D::Vector2f Size = math3D::Vector2f(1.0f, 1.0f);
 
     RGBA8Color Color = Color::White;
-
-
 };
 
 class SandboxLayer : public Layer
@@ -31,41 +29,14 @@ public:
     virtual void onAttach() override
     {
         MX_INFO("Hello Sandbox layer");
-
-        std::string vertexShader = R"(
-            #version 330 core
-            layout (location = 0) in vec2 a_pos;
-
-            uniform mat3 u_model;
-            uniform mat3 u_pv;
-
-            void main()
-            {
-                vec3 position = u_pv * u_model * vec3(a_pos, 1.0);
-                gl_Position = vec4(position.xy, 0.0, 1.0);
-            }
-        )";
-
-        std::string fragmentShader = R"(
-            #version 330 core
-
-            out vec4 color;
-
-            uniform vec4 u_color;
-
-            void main()
-            {
-                color = u_color;
-            }
-        )";
-
-        m_shader = Shader::Create(vertexShader, fragmentShader);
+        
+        AssetsManager::loadAsset<Shader>("ColorShader", AssetLoader<Shader>::fromFile("assets/shaders/TextureShader.glsl"));
 
         float vertices[] = {
-            -0.5f, 0.5f, 
-            0.5f, 0.5f,
-            0.5f, -0.5f,
-            -0.5f, -0.5f,
+            -0.5f, 0.5f, 0.0f, 1.0f, 
+            0.5f, 0.5f, 1.0f, 1.0f,
+            0.5f, -0.5f, 1.0f, 0.0f,
+            -0.5f, -0.5f, 0.0f, 0.0f,
         };
 
         m_vertexArray = VertexArray::Create();
@@ -73,7 +44,8 @@ public:
         auto vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
         
         BufferLayout layout = {
-            {ShaderDataType::Vec2, "a_pos"}
+            {ShaderDataType::Vec2, "a_pos"},
+            {ShaderDataType::Vec2, "a_texCoords"}
         };
 
         vertexBuffer->setLayout(layout);
@@ -90,8 +62,7 @@ public:
 
         m_vertexArray->unbind();
 
-        math3D::Vector4f v(2.0f, 3.0f, 1.0f, 0.0f);
-        MX_INFO(v.xy.toVector());
+        AssetsManager::loadAsset<Texture2D>("face", AssetLoader<Texture2D>::fromFile("assets/images/awesomeface.png"));
     }
 
     virtual void onDetach() override
@@ -99,7 +70,13 @@ public:
         MX_INFO("Hello Sandbox layer leaving");
     }
 
-    virtual void onUpdate(float dt) override
+    virtual bool onWindowFramebufferResize(WindowFramebufferResizeEvent& e) override
+    {
+        m_camera.setProjection(0, e.getWidth(), 0, e.getHeight());
+        return true;
+    }
+
+    virtual void onUpdate(Time dt) override
     {
         m_angle += m_rotationSpeed;
 
@@ -124,8 +101,12 @@ public:
         RendererCommand::setClearColor({0.2f, 0.2f, 0.2f, 1.0f});
         RendererCommand::clear();
 
-        m_shader->bind();
-        m_shader->setUniform("u_pv", m_camera.getPV());
+        auto shader = AssetsManager::getAsset<Shader>("ColorShader");
+        shader->bind();
+        shader->setUniform("u_pv", m_camera.getPV());
+        shader->setUniform("u_texture", 0);
+
+        auto texture = AssetsManager::getAsset<Texture2D>("face");
 
         Renderer::beginScene();
 
@@ -135,38 +116,21 @@ public:
             model = math3D::translate2D(model, quad.Pos);
             model = math3D::rotate2D(model, m_angle);
             model = math3D::scale2D(model, quad.Size);
-            m_shader->setUniform("u_model", model);
-            m_shader->setUniform("u_color", quad.Color);
+            shader->setUniform("u_model", model);
+            texture->bind();
             Renderer::submit(m_vertexArray);
         }
 
         Renderer::endScene();
     }
 
-    virtual bool onWindowClose(WindowCloseEvent& e) override
-    {
-        MX_WARN("Are you trying to leave !!!");
-
-        return false;
-    }
-
-    virtual bool onKeyPressed(KeyPressedEvent& e) override
-    {
-        return true;
-    }
-
-    virtual bool onMouseScrolled(MouseScrolledEvent& e) override
-    {
-        return false;
-    }
-
-    virtual void onEventReceive(Event& e) override
-    {
-    }
-
     virtual void onImguiRender() override
     {
         ImGui::Begin("Control panel");
+        ImGui::Text("allocated memory %zu", MemTracker::getAllocatedMemSize());
+        ImGui::Text("Freed memory %zu", MemTracker::getFreedMemSize());
+        ImGui::Text("memory difference %zu", MemTracker::getAllocatedMemSize() - MemTracker::getFreedMemSize());
+        ImGui::Text("Allocations number %u", MemTracker::getAllocationsNumber());
         ImGui::SliderFloat("rotation speed", &m_rotationSpeed, 0.0f, 100.0f);
         if (ImGui::InputInt("Quads to create", &quadsToCreate))
         {
@@ -207,7 +171,7 @@ public:
 
 private:
     Ref<VertexArray> m_vertexArray;
-    Ref<Shader> m_shader;
+    //Ref<Shader> m_shader;
 
     float m_angle = 0.0f;
     float m_rotationSpeed = 0.0f;
@@ -220,6 +184,8 @@ private:
     std::vector<Quad> m_quads;
     
 };
+
+#include <regex>
 
 class SandboxApp : public Application
 {
@@ -237,7 +203,7 @@ mx::Ref<mx::Application> mx::createApplication(const CommandLineArgs& args)
 {
     AppSettings settings;
     settings.WinProperties.Title = "Sandbox App";
-    settings.WinProperties.Resizable = false;
+    settings.WinProperties.Resizable = true;
     settings.WinAPI = WindowAPI::GLFW;
     settings.GraphicsAPI = RendererAPI::OpenGL;
     return Ref<SandboxApp>::Create(settings);

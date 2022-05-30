@@ -1,7 +1,7 @@
 #pragma once
 
 #include "mxpch.hpp"
-
+#include "utils/types.hpp"
 
 namespace mx
 {
@@ -10,8 +10,8 @@ namespace mx
     public:
         static void init();
 
-        static std::shared_ptr<spdlog::logger> addLogger(const std::string& name);
-        static std::shared_ptr<spdlog::logger> getLogger(const std::string& name);
+        static Ref<spdlog::logger> addLogger(const std::string& name);
+        static Ref<spdlog::logger> getLogger(const std::string& name);
     };
 }
 

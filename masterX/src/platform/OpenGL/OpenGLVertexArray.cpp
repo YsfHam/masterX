@@ -64,6 +64,7 @@ void mx::OpenGLVertexArray::addVertexBuffer(Ref<VertexBuffer> vertexBuffer)
          layout.getStride(), (void*)element.Offset);
          
         glEnableVertexAttribArray(index);
+        index++;
     }
     
     m_vertexBuffers.push_back(vertexBuffer);

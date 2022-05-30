@@ -7,9 +7,9 @@ mx::Camera2D::Camera2D(float left, float right, float top, float bottom)
     m_rotation(0.0f),
     m_projection(math3D::orthographic2D(left, right, top, bottom)),
     m_view(math3D::Matrix3f::Identity),
-    m_transformChanged(true)
+    m_transformChanged(true),
+    m_pv(m_projection * m_view)
 {
-    
 }
 
 void mx::Camera2D::move(const math3D::Vector2f& posOffset) 
@@ -25,11 +25,16 @@ void mx::Camera2D::setPosition(const math3D::Vector2f& position)
 
 }
 
+void mx::Camera2D::setProjection(float left, float right, float top, float bottom)
+{
+    m_projection = math3D::orthographic2D(left, right, top, bottom);
+    m_pv = m_projection * m_view;
+}
+
 void mx::Camera2D::setRotation(const math3D::Angle& angle) 
 {
     m_rotation = angle;    
     m_transformChanged = true;
-
 }
 
 void mx::Camera2D::rotate(const math3D::Angle& angle)
@@ -47,7 +52,8 @@ math3D::Matrix3f mx::Camera2D::getPV()
         m_view = math3D::rotate2D(m_view, m_rotation).transpose();
         m_view = math3D::translate2D(m_view, -1 * m_position);
         m_transformChanged = false;
+        m_pv = m_projection * m_view;
     }
 
-    return m_projection * m_view;
+    return m_pv;
 }
