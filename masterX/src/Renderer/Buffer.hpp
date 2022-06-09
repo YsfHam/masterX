@@ -119,6 +119,7 @@ namespace mx
 
         virtual void bind() = 0;
         virtual void unbind() = 0;
+        virtual void addSubData(void *vertices, uint32_t size, uint32_t offset) = 0;
         
         void setLayout(BufferLayout layout) { m_layout = layout; }
         const BufferLayout& getLayout() const { return m_layout; }

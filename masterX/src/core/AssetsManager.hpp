@@ -46,7 +46,6 @@ namespace mx
         static void addAsset(const std::string& assetName, const Ref<Asset>& asset)
         {
             MX_CORE_ASSERT(m_assets.find(assetName) == m_assets.end(), "Asset {} already exists", assetName);
-
             m_assets[assetName] = asset;
         }
 

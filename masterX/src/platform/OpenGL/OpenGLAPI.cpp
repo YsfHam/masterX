@@ -30,6 +30,12 @@ namespace mx
 
     void OpenGLAPI::drawIndexed(Ref<VertexArray>& vertexArray)
     {
-        glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+        drawIndexed(vertexArray, vertexArray->getIndexBuffer()->getCount());
+    }
+
+    void OpenGLAPI::drawIndexed(Ref<VertexArray>& vertexArray, uint32_t count)
+    {
+        MX_CORE_ASSERT(count <= vertexArray->getIndexBuffer()->getCount(), "cannot draw all these indices");
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     }
 }

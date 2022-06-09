@@ -2,6 +2,7 @@
 
 #include "intrinsicsCheck.hpp"
 #include "Vector2f.hpp"
+#include "swizzle.hpp"
 
 #include <iostream>
 
@@ -29,7 +30,14 @@ namespace math3D
 
 
     public:
-        float x, y, z;
+        union
+        {
+            struct
+            {
+                float x, y, z;
+            };
+            SWIZZLE_VEC2(x, y) xy;
+        };
 
         static Vector3f Zero;
     };

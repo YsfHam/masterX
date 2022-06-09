@@ -11,10 +11,12 @@ namespace mx
     {
     public:
         OpenGLVertexBuffer(void *vertices, uint32_t size);
+        OpenGLVertexBuffer(uint32_t size);
         ~OpenGLVertexBuffer();
         
         virtual void bind() override;
         virtual void unbind() override;
+        virtual void addSubData(void *vertices, uint32_t size,  uint32_t offset) override;
 
     private:
         RendererID m_bufferID;

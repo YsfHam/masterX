@@ -9,6 +9,14 @@ mx::OpenGLVertexBuffer::OpenGLVertexBuffer(void *vertices, uint32_t size)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+mx::OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+{
+    glGenBuffers(1, &m_bufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_bufferID);
+    glBufferData(GL_ARRAY_BUFFER, size , nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 mx::OpenGLVertexBuffer::~OpenGLVertexBuffer()
 {
     glDeleteBuffers(1, &m_bufferID);
@@ -22,6 +30,11 @@ void mx::OpenGLVertexBuffer::bind()
 void mx::OpenGLVertexBuffer::unbind()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void mx::OpenGLVertexBuffer::addSubData(void *vertices, uint32_t size,  uint32_t offset)
+{
+    glBufferSubData(GL_ARRAY_BUFFER, offset, size, vertices);
 }
 
 // index buffer impl

@@ -14,6 +14,8 @@ namespace mx
 
         virtual uint32_t getWidth() = 0;
         virtual uint32_t getHeight() = 0;
+
+        virtual uint32_t getID() const = 0;
     };
 
     class Texture2D : public Texture

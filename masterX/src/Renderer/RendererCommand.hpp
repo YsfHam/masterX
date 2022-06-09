@@ -31,6 +31,11 @@ namespace mx
             s_rendererAPI->drawIndexed(vertexArray);
         }
 
+        static void drawIndexed(Ref<VertexArray>& vertexArray, uint32_t count)
+        {
+            s_rendererAPI->drawIndexed(vertexArray, count);
+        }
+
     private:
         static Scope<RendererCommandsAPI> s_rendererAPI;
     };

@@ -4,11 +4,10 @@
 #include "Log.hpp"
 #include "Assert.hpp"
 #include "Input/Input.hpp"
-#include "Renderer/Renderer.hpp"
 #include "Timer.hpp"
 
-
-#include <chrono>
+#include "Renderer/Renderer.hpp"
+#include "Renderer/Renderer2D.hpp"
 
 
 mx::Application *mx::Application::s_instance = nullptr;
@@ -25,7 +24,9 @@ mx::Application::Application(const AppSettings& settings)
 
     m_window = Window::Create(settings.WinProperties);
     Input::init();
+
     RendererCommand::init();
+    Renderer2D::init();
 
     if (m_imguiEnabled)
     {
@@ -36,7 +37,7 @@ mx::Application::Application(const AppSettings& settings)
 
 mx::Application::~Application() 
 {
-    MX_CORE_FATAL("Bye");
+    Renderer2D::shutdown();
 }
 
 void mx::Application::pushLayer(mx::Ref<Layer> layer)

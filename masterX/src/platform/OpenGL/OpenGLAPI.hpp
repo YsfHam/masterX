@@ -14,6 +14,7 @@ namespace mx
         virtual void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
 
         virtual void drawIndexed(Ref<VertexArray>& vertexArray) override;
+        virtual void drawIndexed(Ref<VertexArray>& vertexArray, uint32_t count) override;
     private:
         int m_clearFlags = 0;
     };

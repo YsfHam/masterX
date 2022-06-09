@@ -1,6 +1,6 @@
 #include <masterX.hpp>
 #include <core/EntryPoint.hpp>
-#include <chrono>
+
 using namespace mx;
 
 static int randomBetween(int a, int b)
@@ -15,6 +15,8 @@ struct Quad
     math3D::Vector2f Size = math3D::Vector2f(1.0f, 1.0f);
 
     RGBA8Color Color = Color::White;
+
+    bool UseTex = false;
 };
 
 class SandboxLayer : public Layer
@@ -24,45 +26,13 @@ public:
         : m_camera(0.0f, 800.0f, 0.0f, 600.0f)
     {
         srand(time(nullptr));
+
+        AssetsManager::loadAsset("face", AssetLoader<Texture2D>::fromFile("assets/images/awesomeface.png"));
     }
 
     virtual void onAttach() override
     {
         MX_INFO("Hello Sandbox layer");
-        
-        AssetsManager::loadAsset<Shader>("ColorShader", AssetLoader<Shader>::fromFile("assets/shaders/TextureShader.glsl"));
-
-        float vertices[] = {
-            -0.5f, 0.5f, 0.0f, 1.0f, 
-            0.5f, 0.5f, 1.0f, 1.0f,
-            0.5f, -0.5f, 1.0f, 0.0f,
-            -0.5f, -0.5f, 0.0f, 0.0f,
-        };
-
-        m_vertexArray = VertexArray::Create();
-
-        auto vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
-        
-        BufferLayout layout = {
-            {ShaderDataType::Vec2, "a_pos"},
-            {ShaderDataType::Vec2, "a_texCoords"}
-        };
-
-        vertexBuffer->setLayout(layout);
-
-        m_vertexArray->addVertexBuffer(vertexBuffer);
-
-        uint32_t indices[] = {
-            0, 1, 2,
-            2, 3, 0
-        };
-
-        auto indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-        m_vertexArray->setIndexBuffer(indexBuffer);
-
-        m_vertexArray->unbind();
-
-        AssetsManager::loadAsset<Texture2D>("face", AssetLoader<Texture2D>::fromFile("assets/images/awesomeface.png"));
     }
 
     virtual void onDetach() override
@@ -78,6 +48,17 @@ public:
 
     virtual void onUpdate(Time dt) override
     {
+        if (m_nbFrames == 0)
+        {
+            m_delta = m_deltaMean / m_maxFrames;
+            m_deltaMean = 0.0f;
+        }
+        else
+        {
+            m_deltaMean = m_deltaMean + dt;
+        }
+        m_nbFrames = (m_nbFrames + 1) % m_maxFrames;
+
         m_angle += m_rotationSpeed;
 
         math3D::Vector2f camPos = math3D::Vector2f::Zero;
@@ -101,36 +82,34 @@ public:
         RendererCommand::setClearColor({0.2f, 0.2f, 0.2f, 1.0f});
         RendererCommand::clear();
 
-        auto shader = AssetsManager::getAsset<Shader>("ColorShader");
-        shader->bind();
-        shader->setUniform("u_pv", m_camera.getPV());
-        shader->setUniform("u_texture", 0);
+        Renderer2D::beginScene(m_camera);
 
-        auto texture = AssetsManager::getAsset<Texture2D>("face");
-
-        Renderer::beginScene();
-
-        for (Quad& quad : m_quads)
+        for (auto& quad : m_quads)
         {
-            math3D::Matrix3f model = math3D::Matrix3f::Identity;
-            model = math3D::translate2D(model, quad.Pos);
-            model = math3D::rotate2D(model, m_angle);
-            model = math3D::scale2D(model, quad.Size);
-            shader->setUniform("u_model", model);
-            texture->bind();
-            Renderer::submit(m_vertexArray);
-        }
+            if (!quad.UseTex)
+            {
+                Renderer2D::drawQuad(quad.Pos, quad.Size, quad.Color, m_angle);
+            }   
+            else
+            {
+                Renderer2D::drawQuad(quad.Pos, quad.Size, quad.Color, m_angle, AssetsManager::getAsset<Texture2D>("face"));
+            }
+        }   
 
-        Renderer::endScene();
+        Renderer2D::endScene();
     }
 
     virtual void onImguiRender() override
     {
         ImGui::Begin("Control panel");
-        ImGui::Text("allocated memory %zu", MemTracker::getAllocatedMemSize());
-        ImGui::Text("Freed memory %zu", MemTracker::getFreedMemSize());
+        ImGui::Text("allocated memory %f", MemTracker::getAllocatedMemSize() / 1024.0f);
+        ImGui::Text("Freed memory %f", MemTracker::getFreedMemSize() / 1024.0f);
         ImGui::Text("memory difference %zu", MemTracker::getAllocatedMemSize() - MemTracker::getFreedMemSize());
         ImGui::Text("Allocations number %u", MemTracker::getAllocationsNumber());
+        ImGui::Text("Quads number : %zu", m_quads.size());
+        ImGui::Text("Draw calls : %u", Statistics::data.DrawCalls);
+        ImGui::Text("delta time %f", m_delta.miliseconds());
+        ImGui::Text("fps %f", 1.0f / m_delta.seconds());
         ImGui::SliderFloat("rotation speed", &m_rotationSpeed, 0.0f, 100.0f);
         if (ImGui::InputInt("Quads to create", &quadsToCreate))
         {
@@ -148,6 +127,11 @@ public:
                 quad.Color.r = randomBetween(0, 255);
                 quad.Color.g = randomBetween(0, 255);
                 quad.Color.b = randomBetween(0, 255);
+                int random = randomBetween(0, 100);
+                if (random > 50)
+                    quad.UseTex = true;
+                
+                MX_TRACE("{}, {}", random, quad.UseTex);
 
                 m_quads.push_back(quad);
             }
@@ -180,12 +164,15 @@ private:
 
     Camera2D m_camera;
 
+    Time m_delta;
+    Time m_deltaMean;
+    uint32_t m_nbFrames = 0;
+    uint32_t m_maxFrames = 100;
+
 
     std::vector<Quad> m_quads;
     
 };
-
-#include <regex>
 
 class SandboxApp : public Application
 {
@@ -203,8 +190,9 @@ mx::Ref<mx::Application> mx::createApplication(const CommandLineArgs& args)
 {
     AppSettings settings;
     settings.WinProperties.Title = "Sandbox App";
-    settings.WinProperties.Resizable = true;
+    settings.WinProperties.Resizable = false;
     settings.WinAPI = WindowAPI::GLFW;
     settings.GraphicsAPI = RendererAPI::OpenGL;
+    settings.args = args;
     return Ref<SandboxApp>::Create(settings);
 }

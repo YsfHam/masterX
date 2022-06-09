@@ -16,6 +16,8 @@ namespace mx
         virtual uint32_t getWidth() override;
         virtual uint32_t getHeight() override;
 
+        virtual uint32_t getID() const override { return m_rendererID; };
+
         virtual std::string getName() const override { return m_name; }
     private:
         void initTex();

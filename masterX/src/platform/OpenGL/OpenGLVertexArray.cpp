@@ -66,7 +66,8 @@ void mx::OpenGLVertexArray::addVertexBuffer(Ref<VertexBuffer> vertexBuffer)
         glEnableVertexAttribArray(index);
         index++;
     }
-    
+    glBindVertexArray(0);
+
     m_vertexBuffers.push_back(vertexBuffer);
 }
 
