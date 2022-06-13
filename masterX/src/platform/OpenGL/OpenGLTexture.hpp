@@ -16,11 +16,15 @@ namespace mx
         virtual uint32_t getWidth() override;
         virtual uint32_t getHeight() override;
 
+        virtual void setParameters(const Texture2DParameters& parameters) override;
+        virtual Texture2DParameters getParameters() const override { return m_parameters; }
+
+        virtual void setTillingFactor(float factor) override { m_parameters.TillingFactor = factor; };
+        virtual float getTillingFactor() const override { return m_parameters.TillingFactor; };
+
         virtual uint32_t getID() const override { return m_rendererID; };
 
         virtual std::string getName() const override { return m_name; }
-    private:
-        void initTex();
 
     private:
         uint32_t m_width;
@@ -29,5 +33,7 @@ namespace mx
         RendererID m_rendererID;
 
         std::string m_name;
+
+        Texture2DParameters m_parameters;
     };
 }

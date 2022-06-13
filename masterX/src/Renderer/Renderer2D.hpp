@@ -19,6 +19,16 @@ namespace mx
 
         static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const math3D::Angle& angle, const Ref<Texture2D>& texture);
         static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const Ref<Texture2D>& texture);
+        static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const math3D::Angle& angle, const Ref<Texture2D>& texture);
+        static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Ref<Texture2D>& texture);
+        static void drawQuad(const math3D::Vector2f& position, const Ref<Texture2D>& texture);
+
+        static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const math3D::Angle& angle, const Ref<SubTexture2D>& subTexture);
+        static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const Ref<SubTexture2D>& subTexture);
+        static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const math3D::Angle& angle, const Ref<SubTexture2D>& subTexture);
+        static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Ref<SubTexture2D>& subTexture);
+
+        
         static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const math3D::Angle& angle);
         static void drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color);
     };

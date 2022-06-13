@@ -35,12 +35,12 @@ static MemData s_data;
 
 namespace mx
 {
-    size_t MemTracker::getAllocatedMemSize()
+    MemSize MemTracker::getAllocatedMemSize()
     {
         return s_data.AllocatedMem;
     }
 
-    size_t MemTracker::getFreedMemSize()
+    MemSize MemTracker::getFreedMemSize()
     {
         return s_data.FreedMem;
     }

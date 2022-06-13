@@ -14,6 +14,11 @@ namespace mx
 
         operator float() const { return m_seconds; }
 
+        static Time fromMiliseconds(float miliseconds)
+        {
+            return Time(miliseconds * 0.001f);
+        }
+
     private:
         float m_seconds;
     };

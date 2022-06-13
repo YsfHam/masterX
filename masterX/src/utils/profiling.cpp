@@ -4,4 +4,9 @@
 namespace mx
 {
     Statistics::StatisticsData Statistics::data;
+
+    void Statistics::reset()
+    {
+        data.DrawCalls = 0;
+    }
 }

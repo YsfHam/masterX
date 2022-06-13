@@ -4,6 +4,16 @@
 #include <stb_image.h>
 #include <glad/glad.h>
 
+static GLint textureParam(mx::TextureOption option)
+{
+    if (option == mx::TextureOption::Linear)
+        return GL_LINEAR;
+    else if (option == mx::TextureOption::Nearest)
+        return GL_NEAREST;
+
+    return GL_NONE;
+}
+
 namespace mx
 {
     OpenGLTexture2D::OpenGLTexture2D(const std::string& filepath)
@@ -23,7 +33,7 @@ namespace mx
         else if (channels == 4)
             format = GL_RGBA;
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, pixels);
-        initTex();
+        setParameters(Texture2DParameters());
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
@@ -33,7 +43,7 @@ namespace mx
         glGenTextures(1, &m_rendererID);
         glBindTexture(GL_TEXTURE_2D, m_rendererID);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        initTex();
+        setParameters(Texture2DParameters());
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
@@ -58,11 +68,12 @@ namespace mx
         return m_height;
     }
 
-    void OpenGLTexture2D::initTex()
+    void OpenGLTexture2D::setParameters(const Texture2DParameters& parameters)
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR);
+        m_parameters = parameters;
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, textureParam(parameters.MagFilter));
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, textureParam(parameters.MinFilter));
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureParam(parameters.WrapS));
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureParam(parameters.WrapT));
     }
 }

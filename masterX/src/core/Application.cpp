@@ -9,6 +9,8 @@
 #include "Renderer/Renderer.hpp"
 #include "Renderer/Renderer2D.hpp"
 
+#include "utils/profiling.hpp"
+
 
 mx::Application *mx::Application::s_instance = nullptr;
 
@@ -61,10 +63,12 @@ void mx::Application::run()
     Timer timer;
     while (m_window->isOpen())
     {
+        Statistics::reset();
         if (!m_mimimized)
         {
+            auto dt = timer.restart();
             for (auto layer : m_layerStack)
-                layer->onUpdate(timer.restart());
+                layer->onUpdate(dt);
         }
 
         if (m_imguiEnabled)

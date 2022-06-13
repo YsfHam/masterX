@@ -3,36 +3,26 @@
 
 using namespace mx;
 
-static int randomBetween(int a, int b)
-{
-    return rand() % (b - a + 1) + a;
-}
-
-
-struct Quad
-{
-    math3D::Vector2f Pos = math3D::Vector2f::Zero;
-    math3D::Vector2f Size = math3D::Vector2f(1.0f, 1.0f);
-
-    RGBA8Color Color = Color::White;
-
-    bool UseTex = false;
-};
-
 class SandboxLayer : public Layer
 {
 public:
     SandboxLayer()
         : m_camera(0.0f, 800.0f, 0.0f, 600.0f)
     {
-        srand(time(nullptr));
-
-        AssetsManager::loadAsset("face", AssetLoader<Texture2D>::fromFile("assets/images/awesomeface.png"));
     }
 
     virtual void onAttach() override
     {
         MX_INFO("Hello Sandbox layer");
+
+        AssetsManager::loadAsset("face", AssetLoader<Texture2D>::fromFile("assets/images/awesomeface.png"));
+        auto tex = AssetsManager::loadAsset("character", AssetLoader<Texture2D>::fromFile("assets/images/spriteSheet.png"));
+
+        for (int y = 0; y < 2; y++)
+        {
+            for (int x = 0; x < 3; x++)
+                m_subTextures[y * 3 + x] = SubTexture2D::Create(tex, {(float)x, (float)y}, {172.0f, 153.0f});
+        }
     }
 
     virtual void onDetach() override
@@ -48,18 +38,6 @@ public:
 
     virtual void onUpdate(Time dt) override
     {
-        if (m_nbFrames == 0)
-        {
-            m_delta = m_deltaMean / m_maxFrames;
-            m_deltaMean = 0.0f;
-        }
-        else
-        {
-            m_deltaMean = m_deltaMean + dt;
-        }
-        m_nbFrames = (m_nbFrames + 1) % m_maxFrames;
-
-        m_angle += m_rotationSpeed;
 
         math3D::Vector2f camPos = math3D::Vector2f::Zero;
 
@@ -79,99 +57,36 @@ public:
 
         m_camera.move(camPos);
 
+        auto faceTex = AssetsManager::getAsset<Texture2D>("face");
+        faceTex->setTillingFactor(3.0f);
+
         RendererCommand::setClearColor({0.2f, 0.2f, 0.2f, 1.0f});
         RendererCommand::clear();
 
         Renderer2D::beginScene(m_camera);
-
-        for (auto& quad : m_quads)
+        Renderer2D::drawQuad({300.0f, 150.0f}, {172.0f, 153.0f}, m_subTextures[m_drawIndex]);
+        if (m_animationTimer.getElapsedTime() > m_animationDuration)
         {
-            if (!quad.UseTex)
-            {
-                Renderer2D::drawQuad(quad.Pos, quad.Size, quad.Color, m_angle);
-            }   
-            else
-            {
-                Renderer2D::drawQuad(quad.Pos, quad.Size, quad.Color, m_angle, AssetsManager::getAsset<Texture2D>("face"));
-            }
-        }   
+            m_drawIndex = (m_drawIndex + 1) % m_subTextures.size();
+            m_animationTimer.restart();
+        }
 
         Renderer2D::endScene();
     }
 
+
     virtual void onImguiRender() override
     {
-        ImGui::Begin("Control panel");
-        ImGui::Text("allocated memory %f", MemTracker::getAllocatedMemSize() / 1024.0f);
-        ImGui::Text("Freed memory %f", MemTracker::getFreedMemSize() / 1024.0f);
-        ImGui::Text("memory difference %zu", MemTracker::getAllocatedMemSize() - MemTracker::getFreedMemSize());
-        ImGui::Text("Allocations number %u", MemTracker::getAllocationsNumber());
-        ImGui::Text("Quads number : %zu", m_quads.size());
-        ImGui::Text("Draw calls : %u", Statistics::data.DrawCalls);
-        ImGui::Text("delta time %f", m_delta.miliseconds());
-        ImGui::Text("fps %f", 1.0f / m_delta.seconds());
-        ImGui::SliderFloat("rotation speed", &m_rotationSpeed, 0.0f, 100.0f);
-        if (ImGui::InputInt("Quads to create", &quadsToCreate))
-        {
-            for (int i = 0; i < quadsToCreate; i++)
-            {
-                Quad quad;
-                quad.Size.x = randomBetween(30, 100);
-                quad.Size.y = randomBetween(30, 100);
-
-                auto halfSize = quad.Size / 2.0f;
-
-                quad.Pos.x = randomBetween(halfSize.x, 800 - halfSize.x);
-                quad.Pos.y = randomBetween(halfSize.y, 600 - halfSize.y);
-
-                quad.Color.r = randomBetween(0, 255);
-                quad.Color.g = randomBetween(0, 255);
-                quad.Color.b = randomBetween(0, 255);
-                int random = randomBetween(0, 100);
-                if (random > 50)
-                    quad.UseTex = true;
-                
-                MX_TRACE("{}, {}", random, quad.UseTex);
-
-                m_quads.push_back(quad);
-            }
-            quadsToCreate = 0;
-        }
-        int i = 0;
-        for (Quad& quad: m_quads)
-        {
-            auto quadName = "Quad " + std::to_string(++i);
-            ImGui::Text("%s", quadName.c_str());
-            ImGui::DragFloat2("Position", (float*)&quad.Pos);
-            ImGui::DragFloat2("Size", (float*)&quad.Size);
-            int colors[] = {
-                quad.Color.r, quad.Color.g, quad.Color.b
-            };
-            ImGui::DragInt3("Color", colors);
-        }
-
-        ImGui::End();
     }
 
 private:
     Ref<VertexArray> m_vertexArray;
-    //Ref<Shader> m_shader;
-
-    float m_angle = 0.0f;
-    float m_rotationSpeed = 0.0f;
-
-    int quadsToCreate = 0;
 
     Camera2D m_camera;
-
-    Time m_delta;
-    Time m_deltaMean;
-    uint32_t m_nbFrames = 0;
-    uint32_t m_maxFrames = 100;
-
-
-    std::vector<Quad> m_quads;
-    
+    std::array<Ref<SubTexture2D>, 6> m_subTextures;
+    uint32_t m_drawIndex = 0;
+    Timer m_animationTimer;
+    Time m_animationDuration = Time::fromMiliseconds(100.0f);
 };
 
 class SandboxApp : public Application
