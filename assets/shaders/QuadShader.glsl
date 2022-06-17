@@ -29,7 +29,8 @@ void main()
 
 
 
-out vec4 color;
+layout (location = 0) out vec4 color;
+layout (location = 1) out vec4 redColor;
 
 in vec2 v_texCoords;
 in vec4 v_color;
@@ -48,5 +49,6 @@ void main()
         tex = texture(u_textures[1], v_texCoords);
     */
     color = v_color * tex;
+    redColor = vec4(0.9, 0.2, 0.3, 1.0);
 }
 

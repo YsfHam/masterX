@@ -20,5 +20,6 @@ include "masterX/libs/glad"
 include "masterX/libs/Imgui"
 include "masterX/libs/stb_image"
 
-include "sandbox"
+--include "sandbox"
+include "mxge"
 include "masterX"

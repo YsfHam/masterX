@@ -5,4 +5,4 @@ else
   config=$1
 fi
 clear
-./bin/bin/$config*/sandbox
+./bin/bin/$config*/mxge

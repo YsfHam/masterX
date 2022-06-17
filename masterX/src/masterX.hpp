@@ -24,6 +24,7 @@
 #include "Renderer/Texture.hpp"
 #include "Renderer/QuadBatch.hpp"
 #include "Renderer/Renderer2D.hpp"
+#include "Renderer/Framebuffer.hpp"
 
 // math
 #include "math3D/math3D.hpp"
