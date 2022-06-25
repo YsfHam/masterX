@@ -5,11 +5,15 @@
 #include "Assert.hpp"
 #include "Input/Input.hpp"
 #include "Timer.hpp"
+#include "Assert.hpp"
+
 
 #include "Renderer/Renderer.hpp"
 #include "Renderer/Renderer2D.hpp"
 
 #include "utils/profiling.hpp"
+
+#include "ECS/ecs.hpp"
 
 
 mx::Application *mx::Application::s_instance = nullptr;
@@ -17,7 +21,9 @@ mx::Application *mx::Application::s_instance = nullptr;
 mx::Application::Application(const AppSettings& settings) 
     : m_cmdArgs(settings.args), m_imguiEnabled(settings.EnableImGui),
     m_windowAPI(settings.WinAPI), m_rendererAPI(settings.GraphicsAPI),
-    m_mimimized(false)
+    m_mimimized(false),
+    m_running(true),
+    m_exitCode(0)
 {
     MX_CORE_ASSERT(s_instance == nullptr, "Application already created");
     s_instance = this;
@@ -30,6 +36,8 @@ mx::Application::Application(const AppSettings& settings)
     RendererCommand::init();
     Renderer2D::init();
 
+    EntityRegistry::init();
+
     if (m_imguiEnabled)
     {
         m_imguiLayer = Ref<ImguiLayer>::Create();
@@ -40,6 +48,13 @@ mx::Application::Application(const AppSettings& settings)
 mx::Application::~Application() 
 {
     Renderer2D::shutdown();
+    EntityRegistry::shutdown();
+}
+
+mx::Window& mx::Application::getWindow() 
+{
+    MX_CORE_ASSERT(m_window, "Window is not created");
+    return *m_window; 
 }
 
 void mx::Application::pushLayer(mx::Ref<Layer> layer)
@@ -61,7 +76,8 @@ void mx::Application::run()
     m_window->pushEventListnerOverlay(shared_from_this());
 
     Timer timer;
-    while (m_window->isOpen())
+    m_running &= m_window->isOpen();
+    while (m_running)
     {
         Statistics::reset();
         if (!m_mimimized)
@@ -80,6 +96,9 @@ void mx::Application::run()
         }
         
         m_window->update();
+
+        m_running &= m_window->isOpen();
+
     }
 
     m_window->removeEventsListener(shared_from_this());

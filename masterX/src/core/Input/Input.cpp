@@ -2,6 +2,7 @@
 #include "Input.hpp"
 
 #include "core/Application.hpp"
+#include "core/Assert.hpp"
 
 #include "platform/glfw/GLFWInput.hpp"
 

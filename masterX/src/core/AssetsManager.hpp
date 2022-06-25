@@ -28,11 +28,13 @@ namespace mx
         static AssetLoader<T> fromFile(const std::string& filename)
         {
             MX_CORE_ASSERT(false, "No known implementation for {}", typeid(T).name());
+            return AssetLoader<T>([](){ return nullptr; });
         }
         template<typename ...Args>
         static AssetLoader<T> construct(Args&& ...args)
         {
             MX_CORE_ASSERT(false, "No known implementation for {}", typeid(T).name());
+            return  AssetLoader<T>([](){ return nullptr; });
         }
 
     private:

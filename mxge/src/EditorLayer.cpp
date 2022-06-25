@@ -1,5 +1,11 @@
 #include "EditorLayer.hpp"
 
+struct TagComponent
+{
+    std::string Tag;
+};
+
+
 EditorLayer::EditorLayer()
     : m_camera(0.0f, 
     mx::Application::get().getWindow().getWidth(),
@@ -23,6 +29,8 @@ void EditorLayer::onAttach()
     m_framebuffer = mx::Framebuffer::Create(spec);
 
     mx::AssetsManager::loadAsset("face", mx::AssetLoader<mx::Texture2D>::fromFile("assets/images/awesomeface.png"));
+
+
 }
 
 void EditorLayer::onUpdate(mx::Time dt)
@@ -66,10 +74,25 @@ void EditorLayer::onImguiRender()
 {
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
-    auto texture = mx::AssetsManager::getAsset<mx::Texture2D>("face");
     ImGui::Begin("Viewport");
     auto viewportPanelSize = ImGui::GetContentRegionAvail();
     m_viewPortSize = {viewportPanelSize.x, viewportPanelSize.y};
     ImGui::Image((ImTextureID)(uint64_t)m_framebuffer->getColorAttachement(0), {m_viewPortSize.x, m_viewPortSize.y});
     ImGui::End();
+
+    ImGui::Begin("Entities");
+    if (ImGui::Button("Add entity", {100.0f, 100.0f}))
+    {
+        auto entity = mx::EntityRegistry::createEntity();
+        auto& tag = mx::EntityRegistry::addComponent<TagComponent>(entity);
+        tag.Tag = "New Entity";
+        m_entities.push_back(entity);
+    }
+    for (auto& entity : m_entities)
+    {
+        auto& tag = mx::EntityRegistry::getComponent<TagComponent>(entity);
+        ImGui::Text("%s", tag.Tag.c_str());
+    }
+    ImGui::End();
+
 }

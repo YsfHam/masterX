@@ -2,6 +2,7 @@
 #include "GraphicsContext.hpp"
 
 #include "core/Application.hpp"
+#include "core/Assert.hpp"
 
 #include "platform/OpenGL/OpenGLContext.hpp"
 

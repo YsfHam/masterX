@@ -33,3 +33,6 @@
 #include "utils/profiling.hpp"
 #include "utils/types.hpp"
 #include "utils/memory.hpp"
+
+// ECS
+#include "ECS/ecs.hpp"

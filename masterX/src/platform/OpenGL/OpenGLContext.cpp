@@ -2,6 +2,7 @@
 #include "OpenGLContext.hpp"
 
 #include "core/Application.hpp"
+#include "core/Assert.hpp"
 
 mx::OpenGLContext::OpenGLContext(void *windowHandle)
     : m_windowHandle(windowHandle)

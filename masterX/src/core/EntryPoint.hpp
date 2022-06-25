@@ -12,11 +12,13 @@ int main(int argc, char **argv)
     MX_CORE_INFO("Engine starting ...");
 
     mx::Ref<mx::Application> app = mx::createApplication({(uint32_t)argc, argv});
-
+    int exitCode = 0;
     if (app != nullptr)
     {
+        app->onInit();
         MX_CORE_INFO("Application created");
         app->run();
+        exitCode = app->getExitCode();
         app.reset();
         MX_CORE_INFO("Assets clearing...");
         mx::AssetsManager::clearAssets();
@@ -25,9 +27,11 @@ int main(int argc, char **argv)
     }
     else
         MX_CORE_FATAL("Application creation failed");
-    
-    MX_CORE_INFO("Engine terminates");
+    if (exitCode == 0)
+        MX_CORE_INFO("Engine terminates");
+    else
+        MX_CORE_ERROR("Engine terminates with errors exit code {}", exitCode);
 
-    return 0;
+    return exitCode;
 
 }

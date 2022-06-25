@@ -17,4 +17,6 @@ private:
     math3D::Vector2f m_viewPortSize = math3D::Vector2f::Zero;
 
     mx::Camera2D m_camera;
+
+    std::vector<mx::EntityID> m_entities;
 };

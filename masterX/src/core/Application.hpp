@@ -3,7 +3,6 @@
 #include "Window.hpp"
 #include "LayerStack.hpp"
 #include "Imgui/ImguiLayer.hpp"
-#include "Assert.hpp"
 #include "utils/types.hpp"
 #include "Renderer/GraphicsContext.hpp"
 
@@ -35,17 +34,22 @@ namespace mx
         void pushLayer(mx::Ref<Layer> layer);
         void pushOverlay(mx::Ref<Layer> overlay);
 
-        Window& getWindow() 
-        {
-            MX_CORE_ASSERT(m_window, "Window is not created");
-            return *m_window; 
-        }
+        Window& getWindow();
 
         static Application& get() { return *s_instance; }
 
         const CommandLineArgs& getCommandLineArgs() { return m_cmdArgs; }
         WindowAPI getWindowAPI() const { return m_windowAPI; }
         RendererAPI getRendererAPI() const { return m_rendererAPI; }
+        void exit(int32_t exitCode = 0)
+        {
+            m_exitCode = exitCode;
+            m_running = false;
+        }
+
+        int32_t getExitCode() const { return m_exitCode; }
+
+        virtual void onInit() = 0;
 
 
         void run();
@@ -70,6 +74,8 @@ namespace mx
         RendererAPI m_rendererAPI;
         bool m_imguiEnabled;
         bool m_mimimized;
+        bool m_running;
+        int32_t m_exitCode;
     }; 
 
     mx::Ref<mx::Application> createApplication(const CommandLineArgs& args);

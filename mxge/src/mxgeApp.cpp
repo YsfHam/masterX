@@ -11,6 +11,10 @@ public:
     MXGEApp(const AppSettings& settings)
         : Application(settings)
     {
+    }
+
+    virtual void onInit() override
+    {
         pushLayer(Ref<EditorLayer>::Create());
     }
 };
