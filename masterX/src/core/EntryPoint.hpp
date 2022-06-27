@@ -3,11 +3,14 @@
 #include "Log.hpp"
 #include "utils/types.hpp"
 #include "core/AssetsManager.hpp"
+#include "utils/memory.hpp"
 
 extern mx::Ref<mx::Application> mx::createApplication(const CommandLineArgs& args);
 
 int main(int argc, char **argv)
 {
+    mx::MemTracker::init();
+    
     mx::Log::init();
     MX_CORE_INFO("Engine starting ...");
 
@@ -31,6 +34,8 @@ int main(int argc, char **argv)
         MX_CORE_INFO("Engine terminates");
     else
         MX_CORE_ERROR("Engine terminates with errors exit code {}", exitCode);
+
+    mx::MemTracker::shutdown();
 
     return exitCode;
 

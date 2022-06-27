@@ -27,10 +27,12 @@ namespace mx
     class MemTracker
     {
     public:
+        static void init();
+        static void shutdown();
+
         static MemSize getAllocatedMemSize();
         static MemSize getFreedMemSize();
         static uint32_t getAllocationsNumber();
-        static void free(void* ptr);
 
         template<typename T, typename ...Args>
         static T* allocate(Args&& ...args)

@@ -13,10 +13,18 @@ public:
     virtual void onImguiRender() override;
 
 private:
+    void showActiveSceneEntities();
+
+private:
     mx::Ref<mx::Framebuffer> m_framebuffer;
     math3D::Vector2f m_viewPortSize = math3D::Vector2f::Zero;
 
-    mx::Camera2D m_camera;
+    mx::Camera2D m_editorCamera;
 
-    std::vector<mx::EntityID> m_entities;
+    mx::Ref<mx::Scene> m_activeScene;
+
+    mx::EntityID m_selectedEntity = mx::NullEntity;
+    mx::EntityID m_hoveredEntity = mx::NullEntity;
+
+    mx::ComponentsDisplayer m_componentsDisplayer;
 };

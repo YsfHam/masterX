@@ -31,6 +31,7 @@ Ref<Application> mx::createApplication(const CommandLineArgs& args)
     settings.WinProperties.Title = "masterX Editor";
     settings.WinProperties.Width = 800;
     settings.WinProperties.Height = 600;
+    settings.WinProperties.mode = mx::VideoMode::FullWindowed;
 
     return Ref<MXGEApp>::Create(settings);
 }

@@ -30,52 +30,63 @@ struct MemData
     std::unordered_map<void*, PointerData> Pointers;
 };
 
-static MemData s_data;
+static MemData *s_data;
 
 
 namespace mx
 {
+
+    void MemTracker::init()
+    {
+        s_data = new MemData;
+    }
+    
+    void MemTracker::shutdown()
+    {
+        delete s_data;
+    }
+
     MemSize MemTracker::getAllocatedMemSize()
     {
-        return s_data.AllocatedMem;
+        return s_data->AllocatedMem;
     }
 
     MemSize MemTracker::getFreedMemSize()
     {
-        return s_data.FreedMem;
+        return s_data->FreedMem;
     }
 
     uint32_t MemTracker::getAllocationsNumber()
     {
-        return s_data.AllocationsNumber;
+        return s_data->AllocationsNumber;
     }
 
 
     void MemTracker::registerPointer(void *ptr, size_t size)
     {
         MX_CORE_TRACE("Register pointer address {}, size {}", ptr, size);
-        s_data.AllocatedMem += size;
-        s_data.Pointers[ptr] = PointerData(size);
-        s_data.AllocationsNumber++;
+        s_data->AllocatedMem += size;
+        s_data->Pointers[ptr] = PointerData(size);
+        s_data->AllocationsNumber++;
     }
 
     void MemTracker::registerPointer(void *ptr, size_t unitSize, uint32_t count)
     {
         size_t size = unitSize * count;
         MX_CORE_TRACE("Register array pointer address {}, size {}", ptr, size);
-        s_data.AllocatedMem += size;
-        s_data.Pointers[ptr] = PointerData(size, true);
-        s_data.AllocationsNumber++;
+        s_data->AllocatedMem += size;
+        s_data->Pointers[ptr] = PointerData(size, true);
+        s_data->AllocationsNumber++;
     }
 
     void MemTracker::unregisterPointer(void *ptr, bool& isArray)
     {
         MX_CORE_TRACE("Freeing memory {}", ptr);
-        auto it = s_data.Pointers.find(ptr);
-        MX_CORE_ASSERT(it != s_data.Pointers.end(), "This pointer is not allocated with this memory tracker");
-        s_data.FreedMem += it->second.Size;
+        auto it = s_data->Pointers.find(ptr);
+        MX_CORE_ASSERT(it != s_data->Pointers.end(), "This pointer is not allocated with this memory tracker");
+        s_data->FreedMem += it->second.Size;
         isArray = it->second.IsArray;
-        s_data.Pointers.erase(it);
-        s_data.AllocationsNumber--;
+        s_data->Pointers.erase(it);
+        s_data->AllocationsNumber--;
     }
 }

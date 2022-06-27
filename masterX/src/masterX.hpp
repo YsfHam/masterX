@@ -36,3 +36,6 @@
 
 // ECS
 #include "ECS/ecs.hpp"
+#include "ECS/systems.hpp"
+#include "ECS/Scene.hpp"
+#include "ECS/ComponentsDisplayer.hpp"

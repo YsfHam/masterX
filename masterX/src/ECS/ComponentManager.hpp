@@ -13,13 +13,13 @@ namespace mx
         {
 
         }
-        template<typename T>
-        T& addComponent(EntityID entity)
+        template<typename T, typename ...Args>
+        T& addComponent(EntityID entity, Args&& ...args)
         {
             MX_CORE_ASSERT(!hasComponent<T>(entity), "entity {} already has {} component", entity, typeid(T).name());
             if (!isComponentRegistered<T>())
                 registerComponent<T>();
-            return getComponentArray<T>()->add(entity, T());
+            return getComponentArray<T>()->add(entity, args...);
         }
 
         template<typename T>
@@ -58,15 +58,6 @@ namespace mx
             return it->second;
         }
 
-    private:
-        template<typename T>
-        Ref<ComponentArray<T>> getComponentArray()
-        {
-            auto name = typeid(T).name();
-
-            return std::static_pointer_cast<ComponentArray<T>>(m_componentArrays[name]);
-        }
-
         template<typename T>
         bool isComponentRegistered()
         {
@@ -83,6 +74,16 @@ namespace mx
             m_componentArrays[name] = Ref<ComponentArray<T>>::Create();
             m_componentIDs[name] = m_nextID++;
         }
+        
+    private:
+        template<typename T>
+        Ref<ComponentArray<T>> getComponentArray()
+        {
+            auto name = typeid(T).name();
+
+            return std::static_pointer_cast<ComponentArray<T>>(m_componentArrays[name]);
+        }
+
 
     private:
         std::unordered_map<const char*, Ref<ComponentArrayBase>> m_componentArrays;

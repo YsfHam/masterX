@@ -21,10 +21,11 @@ namespace mx
             std::memset(m_indexToEntity.data(), NullEntity, m_indexToEntity.size());
             std::memset(m_entityToIndex.data(), -1, m_entityToIndex.size());
         }
-        T& add(EntityID entity, T component)
+        template<typename ...Args>
+        T& add(EntityID entity, Args&& ...args)
         {
             CHECK_ENTITY(entity);
-            m_componentArray[m_size] = component;
+            m_componentArray[m_size] = T(args...);
             m_indexToEntity[m_size] = entity;
             m_entityToIndex[ENTITY_AS_INDEX(entity)] = m_size;
             m_size++;

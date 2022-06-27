@@ -19,10 +19,7 @@ uint32_t mx::GLFWWindow::s_WindowsCount = 0;
 
 mx::GLFWWindow::GLFWWindow(const WindowProps& windowProps) 
 {
-
     m_data.WindowProps = windowProps;
-
-    MX_CORE_INFO("Creating Window {}, {}, {}", windowProps.Title, windowProps.Width, windowProps.Height);
 
     if (s_WindowsCount == 0)
     {
@@ -31,6 +28,14 @@ mx::GLFWWindow::GLFWWindow(const WindowProps& windowProps)
         glfwSetErrorCallback(errorCallback);
 
     }
+
+    if (windowProps.mode != VideoMode::Windowed)
+    {
+        auto videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        m_data.WindowProps.Width = videoMode->width;
+        m_data.WindowProps.Height = videoMode->height;
+    }
+    MX_CORE_INFO("Creating Window {}, {}, {}", m_data.WindowProps.Title, m_data.WindowProps.Width, m_data.WindowProps.Height);
     // windows hints
     if (Application::get().getRendererAPI() == RendererAPI::OpenGL)
     {
@@ -40,9 +45,16 @@ mx::GLFWWindow::GLFWWindow(const WindowProps& windowProps)
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     }
 
-    glfwWindowHint(GLFW_RESIZABLE, windowProps.Resizable ? GL_TRUE : GL_FALSE);
+    GLFWmonitor *monitor = nullptr;
+    if (m_data.WindowProps.mode == VideoMode::FullScreen)
+    {
+        monitor = glfwGetPrimaryMonitor();
+        m_data.WindowProps.Resizable = false;
+    }
 
-    m_window = glfwCreateWindow(windowProps.Width, windowProps.Height, windowProps.Title.c_str(), nullptr, nullptr);
+    glfwWindowHint(GLFW_RESIZABLE, m_data.WindowProps.Resizable ? GL_TRUE : GL_FALSE);
+
+    m_window = glfwCreateWindow(m_data.WindowProps.Width, m_data.WindowProps.Height, m_data.WindowProps.Title.c_str(), monitor, nullptr);
     MX_CORE_ASSERT(m_window != nullptr, "Cannot create window");
 
     m_context = GraphicsContext::Create(m_window);
