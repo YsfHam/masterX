@@ -68,7 +68,7 @@ bool isDepthAttachement(mx::FramebufferAttachementFormat format)
 namespace mx
 {
     OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
-    : m_spec(spec), m_width(spec.Width), m_height(spec.Height),
+    : m_spec(spec),
     m_depthAttachment(mx::FramebufferAttachementFormat::None)
     {
         for (auto& attachement : spec.Attachements.Attachements)
@@ -112,7 +112,7 @@ namespace mx
         for (uint32_t i(0); i < m_colorAttachmentsIDs.size(); i++)
         {
             glBindTexture(GL_TEXTURE_2D, m_colorAttachmentsIDs[i]);
-            initTexture(m_colorAttachmentsIDs[i], m_width, m_height, getTextureFormat(m_colorAttachments[i].Format));
+            initTexture(m_colorAttachmentsIDs[i], m_spec.Width, m_spec.Height, getTextureFormat(m_colorAttachments[i].Format));
             setTextureFiltering(getTextureFiltering(m_colorAttachments[i].MinFiltering), getTextureFiltering(m_colorAttachments[i].MagFiltering));
 
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, m_colorAttachmentsIDs[i], 0);
@@ -126,7 +126,7 @@ namespace mx
         {
             glGenTextures(1, &m_depthAttachmentID);
             glBindTexture(GL_TEXTURE_2D, m_depthAttachmentID);
-            initTexture(m_depthAttachmentID, m_width, m_height, getTextureFormat(m_depthAttachment.Format));
+            initTexture(m_depthAttachmentID, m_spec.Width, m_spec.Height, getTextureFormat(m_depthAttachment.Format));
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_depthAttachmentID, 0);
         }
 
@@ -136,10 +136,10 @@ namespace mx
 
     void OpenGLFramebuffer::resize(uint32_t width, uint32_t height)
     {
-        if (width != m_width || height != m_height)
+        if (width != m_spec.Width || height != m_spec.Height)
         {
-            m_width = width;
-            m_height = height;
+            m_spec.Width = width;
+            m_spec.Height = height;
 
             glDeleteFramebuffers(1, &m_rendererID);
             glDeleteTextures(m_colorAttachmentsIDs.size(), m_colorAttachmentsIDs.data());

@@ -2,6 +2,7 @@
 #include "OpenGLShader.hpp"
 
 #include <fstream>
+#include <glm/gtc/type_ptr.hpp>
 
 static GLenum GLShaderType(mx::ShaderType shaderType)
 {
@@ -43,19 +44,19 @@ void mx::OpenGLShader::setUniform(const std::string& name, const float& value)
     glUniform1f(loc, value);
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, const math3D::Vector2f& value)
+void mx::OpenGLShader::setUniform(const std::string& name, const glm::vec2& value)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
     glUniform2f(loc, value.x, value.y);
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, const math3D::Vector3f& value)
+void mx::OpenGLShader::setUniform(const std::string& name, const glm::vec3& value)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
     glUniform3f(loc, value.x, value.y, value.z);
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, const math3D::Vector4f& value)
+void mx::OpenGLShader::setUniform(const std::string& name, const glm::vec4& value)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
     glUniform4f(loc, value.x, value.y, value.z, value.w);
@@ -67,46 +68,46 @@ void mx::OpenGLShader::setUniform(const std::string& name, float* value, uint32_
     glUniform1fv(loc, count, value);
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, math3D::Vector2f* value, uint32_t count)
+void mx::OpenGLShader::setUniform(const std::string& name, glm::vec2* value, uint32_t count)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
     glUniform2fv(loc, count, (GLfloat*)value);
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, math3D::Vector3f* value, uint32_t count)
+void mx::OpenGLShader::setUniform(const std::string& name, glm::vec3* value, uint32_t count)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
     glUniform3fv(loc, count, (GLfloat*)value);
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, math3D::Vector4f* value, uint32_t count)
+void mx::OpenGLShader::setUniform(const std::string& name, glm::vec4* value, uint32_t count)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
     glUniform4fv(loc, count, (GLfloat*)value);
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, const math3D::Matrix4f& value)
+void mx::OpenGLShader::setUniform(const std::string& name, const glm::mat4& value)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
-    glUniformMatrix4fv(loc, 1, GL_TRUE, (GLfloat*)&value);
+    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, const math3D::Matrix3f& value)
+void mx::OpenGLShader::setUniform(const std::string& name, const glm::mat3& value)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
-    glUniformMatrix3fv(loc, 1, GL_TRUE, (GLfloat*)&value);
+    glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, math3D::Matrix4f* value, uint32_t count)
+void mx::OpenGLShader::setUniform(const std::string& name, glm::mat4* value, uint32_t count)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
-    glUniformMatrix4fv(loc, count, GL_TRUE, (GLfloat*)&value);
+    glUniformMatrix4fv(loc, count, GL_FALSE, glm::value_ptr(value[0]));
 }
 
-void mx::OpenGLShader::setUniform(const std::string& name, math3D::Matrix3f* value, uint32_t count)
+void mx::OpenGLShader::setUniform(const std::string& name, glm::mat3* value, uint32_t count)
 {
     uint32_t loc = glGetUniformLocation(m_rendererID, name.c_str());
-    glUniformMatrix3fv(loc, count, GL_TRUE, (GLfloat*)&value);
+    glUniformMatrix3fv(loc, count, GL_FALSE, glm::value_ptr(value[0]));
 }
 
 void mx::OpenGLShader::setUniform(const std::string& name, const int& value)

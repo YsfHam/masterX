@@ -42,7 +42,7 @@ namespace mx
             size_t lastElementIndex = m_size - 1;
             m_componentArray[cmpToRemoveIndex] = m_componentArray[lastElementIndex];
 
-            EntityID lastCmpEntity = INDEX_AS_ENTITY(m_indexToEntity[lastElementIndex]);
+            EntityID lastCmpEntity = m_indexToEntity[lastElementIndex];
             m_entityToIndex[ENTITY_AS_INDEX(lastCmpEntity)] = cmpToRemoveIndex;
             m_indexToEntity[cmpToRemoveIndex] = lastCmpEntity;
 

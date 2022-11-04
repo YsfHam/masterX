@@ -12,12 +12,11 @@ out vec4 v_color;
 out float v_texIndex;
 
 //uniform mat3 u_model;
-uniform mat3 u_pv;
+uniform mat4 u_pv;
 
 void main()
 {
-    vec3 position = u_pv * a_pos;
-    gl_Position = vec4(position.xy, 0.0, 1.0);
+    gl_Position = u_pv * vec4(a_pos.xy, 0.0, 1.0);
 
     v_texCoords = a_texCoords * a_tillingFactor;
     v_color = a_color;

@@ -16,9 +16,16 @@ namespace mx
         auto& tagComponent = EntityRegistry::addComponent<TagComponent>(entity);
         tagComponent.Tag = name.empty() ? "new Entity " + std::to_string(entity) : name;
 
-        m_entities.push_back(entity);
+        m_entities.insert(entity);
 
         return entity;
+    }
+
+    void Scene::deleteEntity(EntityID entity)
+    {
+        EntityRegistry::destroyEntity(entity);
+
+        m_entities.erase(entity);
     }
 
     void Scene::renderScene(Camera2D& camera) 

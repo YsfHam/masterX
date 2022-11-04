@@ -7,3 +7,6 @@
 [submodule "masterX/libs/Imgui"]
 	path = masterX/libs/Imgui
 	url = https://github.com/YsfHam/imgui
+[submodule "masterX/libs/glm"]
+	path = masterX/libs/glm
+	url = https://github.com/g-truc/glm.git

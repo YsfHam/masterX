@@ -1,6 +1,8 @@
 #pragma once
 
-#include "math3D/math3D.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtx/matrix_transform_2d.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace mx
 {
@@ -9,26 +11,25 @@ namespace mx
     public:
         Camera2D(float left, float right, float top, float bottom);
 
-        void move(const math3D::Vector2f& posOffset);
-        void setPosition(const math3D::Vector2f& position);
+        void move(const glm::vec2& posOffset);
+        void setPosition(const glm::vec2& position);
 
         void setProjection(float left, float right, float top, float bottom);
 
-        void setRotation(const math3D::Angle& angle);
-        void rotate(const math3D::Angle& angle);
+        void setRotation(float angle);
+        void rotate(float angle);
 
-        math3D::Matrix3f getPV();
-
-        const math3D::Vector2f& getPosition() const { return m_position; }
-        const math3D::Angle& getRotation() const { return m_rotation; }
+        glm::mat4 getPV();
+        const glm::vec2& getPosition() const { return m_position; }
+        const float getRotation() const { return m_rotation; }
 
     private:
-        math3D::Vector2f m_position;
-        math3D::Angle m_rotation;
+        glm::vec2 m_position;
+        float m_rotation;
 
-        math3D::Matrix3f m_projection;
-        math3D::Matrix3f m_view;
-        math3D::Matrix3f m_pv;
+        glm::mat4 m_projection;
+        glm::mat4 m_view;
+        glm::mat4 m_pv;
         bool m_transformChanged;
     };
 }

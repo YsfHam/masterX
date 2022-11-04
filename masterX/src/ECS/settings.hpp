@@ -18,4 +18,3 @@ namespace mx
 
 #define CHECK_ENTITY(entity) MX_CORE_ASSERT((entity) <= MAX_ENTITIES && (entity) > 0, "Invalid Entity: {}", entity)
 #define ENTITY_AS_INDEX(entity) ((entity) - 1)
-#define INDEX_AS_ENTITY(index) ((index) + 1)

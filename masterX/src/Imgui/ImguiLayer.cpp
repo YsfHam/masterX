@@ -78,7 +78,10 @@ void mx::ImguiLayer::end()
 
 void mx::ImguiLayer::onEventReceive(Event& e)
 {
-	ImGuiIO& io = ImGui::GetIO();
-	e.handled |= e.isInCategory(EventCategoryKeyboard) && io.WantCaptureKeyboard; 
-	e.handled |= e.isInCategory(EventCategoryMouse) && io.WantCaptureMouse; 
+	if (m_blockEvents)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		e.handled |= e.isInCategory(EventCategoryKeyboard) && io.WantCaptureKeyboard; 
+		e.handled |= e.isInCategory(EventCategoryMouse) && io.WantCaptureMouse; 
+	}
 }

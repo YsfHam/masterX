@@ -19,9 +19,29 @@ namespace mx
             MX_CORE_ASSERT(false, "No known implementation for {}", typeid(T).name());
         }
 
+
         void displayComponents(EntityID entity);
 
     private:
+        template<typename T, typename F>
+        void drawComponent(const char *name, EntityID entity, F func)
+        {
+            ComponentID cmpID = EntityRegistry::getComponentID<T>();
+            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+            if (ImGui::TreeNodeEx(reinterpret_cast<void*>(cmpID), flags, "%s", name))
+            {
+                bool cmpRemoved = ImGui::Button("Remove Component");
+                if (cmpRemoved)
+                    EntityRegistry::removeComponent<T>(entity);
+
+                if (!cmpRemoved)
+                    func(EntityRegistry::getComponent<T>(entity));
+
+                ImGui::TreePop();
+            }
+        }
+
+
         template<typename CmpsList>
         void displayComponentsFromList(EntityID entity)
         {

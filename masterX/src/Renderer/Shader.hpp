@@ -2,10 +2,11 @@
 
 #include "mxpch.hpp"
 #include "utils/types.hpp"
-#include "math3D/math3D.hpp"
 #include "Color.hpp"
 #include "core/AssetsManager.hpp"
 #include "core/Assert.hpp"
+
+#include <glm/glm.hpp>
 
 
 constexpr size_t NB_SHADER_TYPES = 2;
@@ -51,20 +52,20 @@ namespace mx
         virtual void bind() = 0;
 
         virtual void setUniform(const std::string& name, const float& value) = 0;
-        virtual void setUniform(const std::string& name, const math3D::Vector2f& value) = 0;
-        virtual void setUniform(const std::string& name, const math3D::Vector3f& value) = 0;
-        virtual void setUniform(const std::string& name, const math3D::Vector4f& value) = 0;
+        virtual void setUniform(const std::string& name, const glm::vec2& value) = 0;
+        virtual void setUniform(const std::string& name, const glm::vec3& value) = 0;
+        virtual void setUniform(const std::string& name, const glm::vec4& value) = 0;
 
         virtual void setUniform(const std::string& name, float* value, uint32_t count) = 0;
-        virtual void setUniform(const std::string& name, math3D::Vector2f* value, uint32_t count) = 0;
-        virtual void setUniform(const std::string& name, math3D::Vector3f* value, uint32_t count) = 0;
-        virtual void setUniform(const std::string& name, math3D::Vector4f* value, uint32_t count) = 0;
+        virtual void setUniform(const std::string& name, glm::vec2* value, uint32_t count) = 0;
+        virtual void setUniform(const std::string& name, glm::vec3* value, uint32_t count) = 0;
+        virtual void setUniform(const std::string& name, glm::vec4* value, uint32_t count) = 0;
 
-        virtual void setUniform(const std::string& name, const math3D::Matrix4f& value) = 0;
-        virtual void setUniform(const std::string& name, const math3D::Matrix3f& value) = 0;
+        virtual void setUniform(const std::string& name, const glm::mat4& value) = 0;
+        virtual void setUniform(const std::string& name, const glm::mat3& value) = 0;
 
-        virtual void setUniform(const std::string& name, math3D::Matrix4f* value, uint32_t count) = 0;
-        virtual void setUniform(const std::string& name, math3D::Matrix3f* value, uint32_t count) = 0;
+        virtual void setUniform(const std::string& name, glm::mat4* value, uint32_t count) = 0;
+        virtual void setUniform(const std::string& name, glm::mat3* value, uint32_t count) = 0;
 
         virtual void setUniform(const std::string& name, const int& value) = 0;
         virtual void setUniform(const std::string& name, int* value, uint32_t count) = 0;

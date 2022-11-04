@@ -21,11 +21,9 @@ namespace mx
             return m_colorAttachmentsIDs[index];
         }
 
-        virtual uint32_t getWidth() const override { return m_width; }
-        virtual uint32_t getHeight() const override { return m_height; }
-
         void init();
         virtual void resize(uint32_t width, uint32_t height) override;
+        virtual const FramebufferSpecification& getSpecification() const override { return m_spec; }
 
     private:
         FramebufferSpecification m_spec;
@@ -37,8 +35,6 @@ namespace mx
 
         std::vector<RendererID> m_colorAttachmentsIDs;
         RendererID m_depthAttachmentID;
-
-        uint32_t m_width, m_height;
 
     };
 }

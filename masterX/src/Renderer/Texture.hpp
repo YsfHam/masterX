@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/AssetsManager.hpp"
-#include "math3D/math3D.hpp"
+#include <glm/glm.hpp>
 namespace mx
 {
     enum class TextureOption
@@ -57,14 +57,14 @@ namespace mx
     class SubTexture2D
     {
     public:
-        static Ref<SubTexture2D> Create(const Ref<Texture2D>& texture, const math3D::Vector2f& coords, const math3D::Vector2f& size);
+        static Ref<SubTexture2D> Create(const Ref<Texture2D>& texture, const glm::vec2& coords, const glm::vec2& size);
 
-        SubTexture2D(const Ref<Texture2D>& texture, const math3D::Vector2f& min, const math3D::Vector2f& max);
+        SubTexture2D(const Ref<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max);
         
         Ref<Texture2D> getTexture() { return m_texture; }
-        const math3D::Vector2f* getTextureCoords() const { return m_textureCoords; }
+        const glm::vec2* getTextureCoords() const { return m_textureCoords; }
     private:
         Ref<Texture2D> m_texture;
-        math3D::Vector2f m_textureCoords[4];
+        glm::vec2 m_textureCoords[4];
     };
 }

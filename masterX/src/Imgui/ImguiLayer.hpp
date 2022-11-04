@@ -12,8 +12,13 @@ namespace mx
         
         virtual void onEventReceive(Event& e) override;
 
+        void blockEvents(bool blockEvents) { m_blockEvents = blockEvents; }
+
         void begin();
         void end();
+
+    private:
+        bool m_blockEvents;
 
     };
 }

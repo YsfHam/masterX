@@ -12,24 +12,30 @@ namespace mx
     void ComponentsDisplayer::displayComponent<TagComponent>(EntityID entity)
     {
         auto& tagComponent = EntityRegistry::getComponent<TagComponent>(entity);
+
         ImGui::InputText("Tag", &tagComponent.Tag);
     }
 
     template<>
     void ComponentsDisplayer::displayComponent<Transform2DComponent>(EntityID entity)
     {
-        auto& transformComponent = EntityRegistry::getComponent<Transform2DComponent>(entity);
+        drawComponent<Transform2DComponent>("Transform2D", entity, [](auto& transformComponent){
+            ImGui::DragFloat2("Position", (float*)&transformComponent.Position);
+            ImGui::DragFloat2("Size", (float*)&transformComponent.Size);
+            
+            float rotation = transformComponent.Rotation;
+            ImGui::DragFloat("Rotation", &rotation);
+            transformComponent.Rotation = rotation;
+        });
 
-        ImGui::DragFloat2("Position", (float*)&transformComponent.Position);
-        ImGui::DragFloat2("Size", (float*)&transformComponent.Size);
-        ImGui::DragFloat("Rotation", (float*)&transformComponent.Rotation);
     }
 
     template<>
     void ComponentsDisplayer::displayComponent<SpriteRendererComponent>(EntityID entity)
     {
-        auto& spriteRendererComponent = EntityRegistry::getComponent<SpriteRendererComponent>(entity);
+        drawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& spriteRendererComponent){
+            ImGui::ColorEdit4("Color", (float*)&spriteRendererComponent.Color); 
+        });
 
-        ImGui::ColorEdit4("Color", (float*)&spriteRendererComponent.Color);
     }
 }

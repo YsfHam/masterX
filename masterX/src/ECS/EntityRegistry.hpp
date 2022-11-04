@@ -45,6 +45,13 @@ namespace mx
             return cmp;
         }
 
+        template<typename T, typename ...Args>
+        static T& addComponentIfNotExists(EntityID entity, Args&& ...args)
+        {
+            if (!hasComponent<T>(entity))
+                addComponent<T>(entity, args...);
+        }
+
         template<typename T>
         static void removeComponent(EntityID entity)
         {
@@ -63,6 +70,12 @@ namespace mx
         static bool hasComponent(EntityID entity)
         {
             return s_managers->ComponentManager->hasComponent<T>(entity);
+        }
+
+        template<typename T>
+        static ComponentID getComponentID()
+        {
+            return s_managers->ComponentManager->getComponentID<T>();
         }
 
         template<typename T, typename ...SigCmps>

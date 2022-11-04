@@ -71,6 +71,12 @@ void mx::Application::pushOverlay(mx::Ref<Layer> overlay)
     m_window->pushEventListnerOverlay(overlay);
 }
 
+void mx::Application::setImGuiEventsBlocking(bool blockEvents)
+{
+    if (m_imguiEnabled)
+        m_imguiLayer->blockEvents(blockEvents);
+}
+
 void mx::Application::run() 
 {
     m_window->pushEventListnerOverlay(shared_from_this());

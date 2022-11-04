@@ -2,8 +2,6 @@
 
 #include "mxpch.hpp"
 
-#include "math3D/math3D.hpp"
-
 #include "Renderer/Color.hpp"
 #include "Renderer/Texture.hpp"
 
@@ -16,9 +14,9 @@ namespace mx
 
     struct Transform2DComponent
     {
-        math3D::Vector2f Position = math3D::Vector2f::Zero;
-        math3D::Vector2f Size = math3D::Vector2f::Zero;
-        math3D::Angle Rotation = 0.0f;
+        glm::vec2 Position = glm::vec2(0.0f);
+        glm::vec2 Size = glm::vec2(0.0f);
+        float Rotation = 0.0f;
     };
 
     struct SpriteRendererComponent

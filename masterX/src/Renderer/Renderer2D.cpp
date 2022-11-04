@@ -10,8 +10,8 @@
 
 struct QuadVertex
 {
-    math3D::Vector3f Pos = math3D::Vector3f::Zero;
-    math3D::Vector2f TexCoords = math3D::Vector2f::Zero;
+    glm::vec3 Pos = glm::vec3(0.0f);
+    glm::vec2 TexCoords = glm::vec2(0.0f);
     mx::Color Color = mx::Color::White;
     float TextureIndex = 0.f;
     float TillingFactor = 1.0f;
@@ -34,23 +34,23 @@ struct RendererData
     std::unordered_map<uint32_t, Tex2DData> Textures;
     uint32_t NbTextures = 0;
     mx::Ref<mx::Texture2D> DefaultTexture;
-    math3D::Vector2f TextureCoords[4];
+    glm::vec2 TextureCoords[4];
 
     mx::QuadBatch<QuadVertex, MaxQuads> QuadRenderBatch;
 
     mx::Ref<mx::Shader> QuadShader;
 
-    math3D::Vector3f vertices[4];
+    glm::vec4 vertices[4];
 
     mx::Ref<mx::VertexArray> VertexArray;
     mx::Ref<mx::IndexBuffer> IndexBuffer;
 
     RendererData()
     : vertices{
-        {-0.5f,  0.5f,  1.0f},
-        { 0.5f,  0.5f,  1.0f},
-        { 0.5f, -0.5f,  1.0f},
-        {-0.5f, -0.5f,  1.0f}
+        { 0.f, 1.f,  0.0f, 1.0f},
+        { 1.f, 1.f,  0.0f, 1.0f},
+        { 1.f, 0.f,  0.0f, 1.0f},
+        { 0.f, 0.f,  0.0f, 1.0f}
     },
     TextureCoords{
         {0.0f, 1.0f},
@@ -64,7 +64,7 @@ struct RendererData
 
 static RendererData *s_data = nullptr;
 
-static void addQuadToBatch(QuadVertex *vertices, const math3D::Matrix3f& transform, const mx::Color& color, float textureIndex, float tillingFactor, const math3D::Vector2f* texCoords)
+static void addQuadToBatch(QuadVertex *vertices, const glm::mat4& transform, const mx::Color& color, float textureIndex, float tillingFactor, const glm::vec2* texCoords)
 {
     vertices[0].Pos = transform * s_data->vertices[0];
     vertices[1].Pos = transform * s_data->vertices[1];
@@ -172,7 +172,7 @@ void mx::Renderer2D::endScene()
     s_data->QuadRenderBatch.flush();
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const math3D::Angle& angle, const Ref<Texture2D>& texture)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Color& color, float angle, const Ref<Texture2D>& texture)
 {
     if (s_data->NbTextures == s_data->TexturesSlots)
     {
@@ -180,11 +180,11 @@ void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Ve
         s_data->QuadRenderBatch.flush();
     }
 
-    math3D::Matrix3f model = math3D::Matrix3f::Identity;   
+    glm::mat4 model = glm::mat4(1.0f);   
 
-    model = math3D::translate2D(model, position);
-    model = math3D::rotate2D(model, angle);
-    model = math3D::scale2D(model, size);
+    model = glm::translate(model, glm::vec3(position, 0.0f));
+    model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(size, 0.0f));
 
     uint32_t textureIndex = 0;
     auto it = s_data->Textures.find(texture->getID());
@@ -199,31 +199,31 @@ void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Ve
     s_data->QuadRenderBatch.add(addQuadToBatch, model, color, (float)textureIndex, texture->getTillingFactor(), s_data->TextureCoords);
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const Ref<Texture2D>& texture)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Color& color, const Ref<Texture2D>& texture)
 {
     drawQuad(position, size, color, 0.0f, texture);
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const math3D::Angle& angle, const Ref<Texture2D>& texture)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, float angle, const Ref<Texture2D>& texture)
 {
     drawQuad(position, size, Color::White, angle, texture);
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Ref<Texture2D>& texture)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture)
 {
     drawQuad(position, size, 0.0f, texture);
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const Ref<Texture2D>& texture)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const Ref<Texture2D>& texture)
 {
-    math3D::Vector2f size = {
+    glm::vec2 size = {
     static_cast<float>(texture->getWidth()), 
     static_cast<float>(texture->getHeight())
     };
     drawQuad(position, size, texture);
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const math3D::Angle& angle, const Ref<SubTexture2D>& subTexture)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Color& color, float angle, const Ref<SubTexture2D>& subTexture)
 {
     if (s_data->NbTextures == s_data->TexturesSlots)
     {
@@ -231,11 +231,11 @@ void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Ve
         s_data->QuadRenderBatch.flush();
     }
 
-    math3D::Matrix3f model = math3D::Matrix3f::Identity;   
+    glm::mat4 model = glm::mat4(1.0f);   
 
-    model = math3D::translate2D(model, position);
-    model = math3D::rotate2D(model, angle);
-    model = math3D::scale2D(model, size);
+    model = glm::translate(model, glm::vec3(position, 0.0f));
+    model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(size, 0.0f));
 
     auto texture = subTexture->getTexture();
     uint32_t textureIndex = 0;
@@ -251,29 +251,29 @@ void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Ve
     s_data->QuadRenderBatch.add(addQuadToBatch, model, color, (float)textureIndex, texture->getTillingFactor(), subTexture->getTextureCoords());
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const Ref<SubTexture2D>& subTexture)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Color& color, const Ref<SubTexture2D>& subTexture)
 {
     drawQuad(position, size, color, 0.0f, subTexture);
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const math3D::Angle& angle, const Ref<SubTexture2D>& subTexture)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, float angle, const Ref<SubTexture2D>& subTexture)
 {
     drawQuad(position, size, Color::White, angle, subTexture);
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Ref<SubTexture2D>& subTexture)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
 {
     drawQuad(position, size, Color::White, 0.0f, subTexture);
 }
 
 
 // Solid color drawing
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color, const math3D::Angle& angle)
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Color& color, float angle)
 {
     drawQuad(position, size, color, angle, s_data->DefaultTexture);
 }
 
-void mx::Renderer2D::drawQuad(const math3D::Vector2f& position, const math3D::Vector2f& size, const Color& color) 
+void mx::Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Color& color) 
 {
     drawQuad(position, size, color, 0.0f);
 }

@@ -19,6 +19,7 @@ project "mxge"
         "%{Includes.spdlog}",
         "%{Includes.GLFW}",
         "%{Includes.Imgui}",
+        "%{Includes.glm}"
     }
 
     links

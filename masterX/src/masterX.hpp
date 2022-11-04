@@ -26,9 +26,6 @@
 #include "Renderer/Renderer2D.hpp"
 #include "Renderer/Framebuffer.hpp"
 
-// math
-#include "math3D/math3D.hpp"
-
 // utils
 #include "utils/profiling.hpp"
 #include "utils/types.hpp"

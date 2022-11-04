@@ -47,6 +47,8 @@ namespace mx
             m_running = false;
         }
 
+        void setImGuiEventsBlocking(bool blockEvents);
+
         int32_t getExitCode() const { return m_exitCode; }
 
         virtual void onInit() = 0;

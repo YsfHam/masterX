@@ -31,14 +31,14 @@ namespace mx
     }
 
 
-    Ref<SubTexture2D> SubTexture2D::Create(const Ref<Texture2D>& texture, const math3D::Vector2f& coords, const math3D::Vector2f& size)
+    Ref<SubTexture2D> SubTexture2D::Create(const Ref<Texture2D>& texture, const glm::vec2& coords, const glm::vec2& size)
     {
-        math3D::Vector2f min = {
+        glm::vec2 min = {
             (coords.x * size.x) / texture->getWidth(),
             (coords.y * size.y) / texture->getHeight()
         };
 
-        math3D::Vector2f max = {
+        glm::vec2 max = {
             ((coords.x  + 1)* size.x) / texture->getWidth(),
             ((coords.y + 1) * size.y) / texture->getHeight()
         };
@@ -46,7 +46,7 @@ namespace mx
         return Ref<SubTexture2D>::Create(texture, min, max);
     }
 
-    SubTexture2D::SubTexture2D(const Ref<Texture2D>& texture, const math3D::Vector2f& min, const math3D::Vector2f& max)
+    SubTexture2D::SubTexture2D(const Ref<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max)
         :
         m_texture(texture),
         m_textureCoords{

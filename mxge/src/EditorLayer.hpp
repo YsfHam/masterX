@@ -2,6 +2,8 @@
 
 #include <masterX.hpp>
 
+#include <glm/glm.hpp>
+
 class EditorLayer : public mx::Layer
 {
 public:
@@ -14,12 +16,20 @@ public:
 
 private:
     void showActiveSceneEntities();
+    void showMainMenuBar();
+    void showViewport();
+    void showEntitiesWindow();
+    void showCurrentEntityComponents();
 
 private:
     mx::Ref<mx::Framebuffer> m_framebuffer;
-    math3D::Vector2f m_viewPortSize = math3D::Vector2f::Zero;
+
+    glm::vec2 m_viewPortSize = glm::vec2(0.0f);
 
     mx::Camera2D m_editorCamera;
+    glm::vec2 m_mouseDragDelta = glm::vec2(0.0f);
+    glm::vec2 m_mouseInitialPosition = glm::vec2(0.0f);
+
 
     mx::Ref<mx::Scene> m_activeScene;
 
@@ -27,4 +37,8 @@ private:
     mx::EntityID m_hoveredEntity = mx::NullEntity;
 
     mx::ComponentsDisplayer m_componentsDisplayer;
+
+    bool m_viewPortOnFocus = false;
+    bool m_openComponentsPopup = false;
+
 };

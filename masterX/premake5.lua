@@ -39,6 +39,7 @@ project "masterX"
         "%{Includes.glad}",
         "%{Includes.Imgui}",
         "%{Includes.stbImage}",
+        "%{Includes.glm}"
     }
 
     defines
